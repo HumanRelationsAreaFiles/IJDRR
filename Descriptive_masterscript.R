@@ -15,10 +15,8 @@
 
 
 # initializing-----------------------------------------------------------------
-# step 1: run hz-scrape_REVISED.R to generate raw data files
-# step 2: run hz-cleanup.R to generate data files for analysis 
-#           (especially DT-hz-event-level-expanded-FA.csv)
-# step 3: run hz-initialize.R to generate the objects "d" and "ovhz" 
+# note: all operations in this script use the data file DT-hz-event-level-expanded-FA.csv
+# before running the below script, run hz.initialize.R to generate the object "d"  
 #           (among others) in your local R environment
 #------------------------------------------------------------------------------
 
@@ -211,7 +209,7 @@
 
 
 # Figure 5---------------------------------------------------------------------
-      # use the following function from CH's hz.functions.R:
+      # write the following function:
       H7_H10_graphs = function(hz, var1, var1name) {
         
         #customizable graph for dimensions of hazards variables
@@ -296,7 +294,7 @@
       
       #read in data
       meta <- read.csv("DT-meta-hz-clean.csv") 
-      finaldata <- read.csv("DT-hz-event-level-expanded-FA.csv") #make sure this is the correct file!
+      finaldata <- read.csv("DT-hz-event-level-expanded-FA.csv") 
       
       
 # "sample" table----------------------------------------------------
@@ -601,7 +599,7 @@
       # again, call dplyr if not already called
       library(dplyr)
       
-      #read in data directly from csv (make sure this is the right file!)
+      #read in data directly from csv
       finaldata <- read.csv("DT-hz-event-level-expanded-FA.csv")
       
       
@@ -696,7 +694,7 @@
       writexl::write_xlsx(table.s7, "tables7")
       
       
-# table S8. (Hz type correlations - adapted from CH's code in hz_type_correlations.R on GitHub)
+# table S8. (Correlations between Hz types)
 #-------------------------------------------------------------------------------
       # start by calling Hmisc if not already
       library(Hmisc)

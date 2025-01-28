@@ -1,0 +1,133 @@
+"SCCS.Name","PSF.Cluster.Number","OWC","eHRAF.Name","Principle.Authorities","Place.Focus","Ethnographic.Present","Coder","Coding.Date","Revision.Date","ID","EA.ID","PSF.Cluster"
+"Nama Hottentot",NA,"FX13","Khoi","Hoernlé, W. 1923.Schultze, Sigmund, Knight, and Ziolkowski 1907.","Gei/Khauan tribe.","1860","Coded by DR and revised by DR",2022-11-21,NA,1,"Aa03",NA
+"!Kung Bushmen",NA,"FX10","San","Marshall, J. 1958; Marshall, L. 1957, 1965, 1976; Thomas 1959","Nyai Nyae region, Namibia","1950","CH",2022-11-10,NA,2,"Aa01",NA
+"Lozi","2","FQ09","Lozi","Gluckman, 1941; 1959; 1967","Ruling Luyana","1900","Resolved between AD and SK",2023-01-09,NA,4,"Ab03","2"
+"Mbundu",NA,"FP13","Ovimbundu","Childs, 1949","Bailundu subtribe","1890","DR",2022-10-24,NA,5,"Ab05",NA
+"Bemba","3","FQ05","Bemba","1. Brelsford, 19442. Labrecque and Horine, 19313. Richards, 19354. Richards, 19375. Richards, 19396. Richards, 19407. Richards, 1956","Zambia branch","1897","AD",2022-10-17,NA,7,"Ac03","3"
+"Nyakyusa",NA,"FN17","Nyakyusa and Ngonde","Wilson, G. 1938Wilson, G. 1939Wilson, G. 1936Wilson, MH. 1959Wilson, MH. 1951Wilson, MH. 1957","Age Villages nearMwaya and Masoko","1934","Coded by DR and revised by DR",2022-10-10,NA,8,"Ad06",NA
+"Ganda","04","FK07","Ganda","Roscoe, J 1911Mair, L.P. 1934","Kyaddondo District around Kampala","1875","Coded by DR and revised by DR",2022-10-12,NA,12,"Ad07","4"
+"Mbuti Pygmies","1","FO04","Mbuti","Turnbull 1962, 1965a,  1965b","Epulu net hunters of the Ituri Forest","1950 (SCCS)*1930 (EA)*used SCCS EP","Resolved between DR and SK then revised by DR",2023-01-09,NA,13,"Aa05","1"
+"Tiv","9","FF57","Tiv","1. Abraham, 19332. Akiga, 19393. Bohannan, 19524. Bohannan, 19535. Bohannan, 19546. Bohannan, 19557. Bohannan, 19578. Bohannan, 19689. Bohannan and Bohannan, 195310. Bohannan and Bohannan, 196811. Bohannan and Bohannan, 196912. Downes, 193313. Price-Williams, 1962","Benue province","1920","AD",2022-10-17,NA,16,"Ah03","9"
+"Ashanti","6","FE12","Akan","Rattray 1923","Kumasi state","1895","DR",2022-10-18,NA,19,"Af03","6"
+"Wolof","07","MS30","Wolof","Gamble 1957","Upper and Lower Salum, Gambia","1950","Coded by SK and revised by AD",2022-10-05,2023-07-19,21,"Cb02","7"
+"Bambara",NA,"FA08","Bambara","1. Henry and Coleman, 19102. Monteil and Looney, 1924","Segou to Bamako on the Niger River","1902","AD",2022-11-11,NA,22,"Ag01",NA
+"Tallensi",NA,"FE11","Tallensi","Fortes and Fortes 1936, Fortes 1945, Fortes 1949","Entirety of tribe(Tongo Village, Ghana)","1934","CH",2022-11-08,NA,23,"Ag04",NA
+"Songhai",NA,"MS20","Songhai","1. Rouch, 19542. Rouch, 1960","Bamba division","1940","AD",2022-10-24,NA,24,"Cb03",NA
+"Fulani",NA,"MS11","Fulani","Dupire 1962a (not listed as match in eHRAF, but PA in SCCS)Dupire 1962b (not listed as match in eHRAF, but PA in SCCS)","Wodaabe of Niger","1951","Coded by DR and revised by AD",2022-10-25,2023-07-19,25,"Cb24",NA
+"Hausa","10","MS12","Hausa","Smith et al., 1955","Zazzagawa of Zaria","1900","Resolved between AD and CH",2023-01-09,NA,26,"Cb26","10"
+"Massa (Masa)",NA,"FI21","Masa","Garine, I. ","Around Yagoua, in Cameroon","1910","DR",2022-11-28,NA,27,"Ai09",NA
+"Azande","5","FO07","Azande","1. Baxter and Butt, 19532. Evans-Pritchard, 19323. Evans-Pritchard, 19564. Evans-Pritchard, 1957a5. Evans-Pritchard, 1957b6. Evans-Pritchard, 19657. Evans-Pritchard, 1971","Yambio chiefdom","1905","AD",2022-10-11,NA,28,"Ai03","5"
+"Fur (Darfar)",NA,"MQ08","Fur","Felkin, R. W. (1885)","Jebel Marra","1880","Coded by DR and revised by DR",2022-11-15,NA,29,"Cb17",NA
+"Otoro Nuba",NA,"FJ21","Nuba","Nadel, S. F. 1947","Entirety, Nuba Hills Otoro","1930","DR",2022-11-18,NA,30,"Ai10",NA
+"Mao",NA,"MP19","Mao","Grottanelli, V. L. 1940 (entire)Cerulli, E. 1956 (partial)","Northern division","1939","Coded by DR and revised by DR",2022-11-02,NA,32,"Ai47",NA
+"Masai","011","FL12","Maasai","Hollis 1905, Merker 1910","Kisonko or Southern Masai, Tanzania","1900","Resolved between SK and DR",2023-01-09,NA,34,"Aj02","11"
+"Konso",NA,"MP17","Konso","In White 1989: Hallpike 1972, 1970a, 1970b, 1975In eHRAF:Hallpike 1970, 1968, 2008","Town of Buso","1935","Coded by CH and revised by AD",2022-11-07,2023-07-19,35,"Ca01",NA
+"Somali","12","MO04","Somali","Lewis, I.M. 1955Lewis, I.M. 1961Drake-Brokman, R.E. 1912","Dolbahanta subtribe","1900","Coded by DR and revised by DR",2022-09-20,2022-12-01,36,"Ca02","12"
+"Amhara","017","MP05","Amhara","Messing 1985","Gondar District","1953","SK",2022-11-15,NA,37,"Ca07","17"
+"Teda",NA,"MS22","Teda","Chapelle 1957, Cline 1950, Le Coeur 1950, Kronenberg 1958","Nomads of Tibesti","1950","SK",2022-11-08,NA,40,"Cc02",NA
+"Riffians",NA,"MX03","Berbers of Morocco","1. Coon, 19312. Pennell, 1987","Entirety, Moroccan","1926","AD",2022-11-08,NA,42,"Cd03",NA
+"Egyptians",NA,"MR13","Fellahin","Anmar 1954","Town and environs of Silwa","1950","SK",2022-11-02,NA,43,"Cd02",NA
+"Rwala Bedouin",NA,"MD04","Rwala Bedouin","Raswan 1947","Unspecified","1913","SK",2022-10-05,NA,46,"Cj02",NA
+"Turks",NA,"MB01","Turks","Helburn 1955, Makal 1954, Pierce 1964, Stirling 1965","Northern Anatolian Plateau","1950","SK",2022-11-04,NA,47,"Ci05",NA
+"Irish",NA,"ER06","Rural Irish","Cresswell 1969","Kinvarra Parish, County Clare","1955","DR",2022-10-26,NA,51,"Cg03",NA
+"Lapps","20","EP04","Saami","Pehrson 1957","Konkama, Sweden","1950","Coded by DR and revised by DR",2022-11-25,NA,52,"Cg04","20"
+"Yurak Samoyed",NA,"RU41","Nenets","Engelhardt and Cooke, A. 1899Islavin, V. 1846","Entirety, tribe.","1894","DR",2022-11-16,NA,53,"Ec04",NA
+"Russians",NA,"RF10","Russians","Benet, S. 1970Dunn, S. P. 1963Dunn, S.P. 1988","Viritatino village","1955","Coded by DR and revised by DR",2022-10-04,NA,54,"Ch11",NA
+"Abkhaz",NA,"RI03","Abkhazians","Janasvili 1894","Entirety: tribe","1880","SK",2022-11-08,NA,55,"Ci12",NA
+"Cill Kurd","21","MA11","Kurds","2. Leach, 19403. Masters, 1953","Town and vicinity of Rowanduz","1951","AD",2022-10-31,NA,57,"Ci11","21"
+"Basseri",NA,"MA10","Basseri","Bath, F.K. 1961Bath, F.K. 1969","Nomadic branch","1958","Coded by DR and revised by DR",2022-11-01,NA,58,"Ea06",NA
+"Punjabi (West)",NA,"AT03","West Punjabi","1. Eglar, 19572. Eglar, 1960","Mohla Village","1950","AD",2022-11-23,NA,59,"Ea13",NA
+"Gond",NA,"AW32","Gond","Elwin 1947, Grigson 1949","Hill Maria","1938","Coded by SK and revised by DR",2022-11-22,NA,60,"Eg13",NA
+"Santal","28","AW42","Santal","Biswas 1956, Culshaw 1949, Mukherjea 1962","Bankura and Birbhum districts of Bengal","1940","Coded by SK and revised by DR",2022-11-04,NA,62,"Ef01","28"
+"Uttar Pradesh",NA,"AW19","Uttar Pradesh","1. Opler and Singh, 19522. Opler and Singh, 1954","Village and vicinity of Senapur","1945","AD",2022-11-22,NA,63,"Ef11",NA
+"Burusho",NA,"AV07","Burusho","Lorimer 1935, 1938, 1939","Hunza State","1934","Coded by SK and revised by DR",2022-10-28,NA,64,"Ee02",NA
+"Kazakh",NA,"RQ02","Kazakh","Grodekov, N.I. 1889Hudson, A.E. 1938","Great Horde","1885","DR",2022-11-15,NA,65,"Eb01",NA
+"Khalka Mongols",NA,"AH01","Mongolia","1. Vreeland, 1973","Narobanchin Territory","1920","AD",2022-11-17,NA,66,"Eb03",NA
+"Lepcha",NA,"AK05","Lepcha","Gorer 1938","Lingthem and vicinity","1937","CH",2022-10-06,NA,68,"Ee03",NA
+"Garo","27","AR05","Garo","Burling, R. 1963","Village and environs of Rengsanggri","1955","Resolved between DR and SK",2023-01-09,NA,69,"Ei01","27"
+"Lakher",NA,"AR20","Mara","1. Parry and Hutton, 1932","Entirety, tribe","1930","Coded by AD and revised by AD",2022-11-26,2023-07-21,70,"Ei04",NA
+"Burmans",NA,"AP04","Burmans","Scott 1910","Nondwin village","1965","CH",2022-11-09,NA,71,"Ei03",NA
+"Lamet",NA,"AM28","Rmeet","1. Izikowitz, 19512. Izikowitz, 1985a3. Izikowitz, 1985b4. Izikowitz, 1958c","Entirety, tribe, northwestern Laos","1940","AD",2022-11-16,NA,72,"Ej01",NA
+"Vietnamese",NA,"AM11","Vietnamese","1. Gourou and Miller, 1936","Red River Delta in Tonkin","1930","AD",2022-11-26,NA,73,"Ej04",NA
+"Siamese (Central Thai)","30","AO07","Central Thai","1. Goldsen et al., 19572. J. R. Hanks, 19633. L. M. Hanks, 19624. Hauck et al., 19565. Hauck et al., 19596. Ingersoll, 19667. Janlekha, 19568. Phillips, 19669. Sharp and L. M. Hanks, 197810. Textor et al., 1973","Village of Bang Chan","1955","Resolved between AD and SK",2023-01-09,NA,76,"Ej09","30"
+"Andamanese","31","AZ02","Andamans","1. Man, 19322. Radcliffe-Brown, 1922","Aka-Bea tribe of South Andaman","1860","AD",2022-10-17,NA,79,"Eh01","31"
+"Javanese",NA,"OE05","Javanese","Dewey 1962,  Fagg 1982, Geertz 1975, Jay 1969","Town and environs of Pare","1954","CH",2022-11-16,NA,83,"Ib02",NA
+"Balinese",NA,"OF07","Balinese","Geertz 1967","Tihingan village","1958","CH",2022-11-16,NA,84,"Ib03",NA
+"Iban","33","OC06","Iban","Freeman 1955","Baleh","1950","CH",2022-11-07,NA,85,"Ib01","33"
+"Badjau",NA,"OA08","Sama-Badjau","Nimmo 1990, 1965, 1972, 1990, 1968, 1970, 2000","Tawi-Tawi and adjacent islands","1963","Coded by SK and revised by DR",2022-10-31,NA,NA,NA,NA
+"Toradja","34","OG11","Eastern Toraja","1. Adriani and Kruijt, 19502. Adriani and Kruijt, 1951a3. Adriani and Kruijt, 1951b4. Adriani and Kruijt, 1951c","Bare’e subgroup","1910","AD",2022-10-18,NA,87,"Ic05","34"
+"Tiwi",NA,"OI20","Tiwi","Hart, C.W.M 1960Hart, C.W.M 1939","Melville Island","1929","DR",2022-11-25,NA,90,"Id03",NA
+"Aranda","35","OI08","Aranda","Spencer Sir, B. and Gillen, F. J. 1927","Alice springs and environs.","1896","Resolved between DR and CH then revised by DR",2023-01-09,NA,91,"Id01","35"
+"Orokaiva",NA,"OJ23","Orokaiva","Williams 1928, 1930","Northern District, Papua New GuineaAiga subtribe","1925","Coded by CH and revised by AD",2022-11-09,2023-07-21,92,"Ie09",NA
+"Kimam",NA,"OJ82","Kimam","Serpenti, L. M. 1965","Bamol village","1960","CH",2022-11-23,NA,93,"Ie18",NA
+"Kapauku","36","OJ29","Kapauku","1. Pospisil, 1958a2. Pospisil, 1958b3. Pospisil, 1958c4. Pospisil, 1963","Village of Botukebo","1955","Resolved between AD and SK",2023-01-09,NA,94,"Ie01","36"
+"Manus",NA,"OM06","Manus","Fortune 1935,Mead 1934, Mead 1956non-PA:Carrier and Carrier 1989","Village of Peri, Manus Province, Papua New Guinea","1929","CH",2022-11-28,NA,96,"Ig09",NA
+"Trobrianders","38","OL06","Trobriands","1. Firth, 19832. Leach, 19713. Lounsbury, 19654. Malinowski, 19165. Malinowski, 1920a6. Malinowski, 1920b7. Malinowski, 19218. Malinowski, 19229. Malinowski, 1926a10. Malinowski, 1926b11. Malinowski, 192712. Malinowski, 192913. Malinowski, 193414. Malinowski, 1935a15. Malinowski, 1935b16. Norick, 199217. Robinson, 197218. Silas, 192419. Silas, 192620. Spiro, 198221. Uberoi, 1971","Kiriwina Island","1914","AD",2022-11-01,NA,98,"Ig02","38"
+"Siwai",NA,"ON19","Siwai","Oliver 1955, 1949a, 1949b.","Southern Bougainville, North Solomons Province, Papua New Guinea","1939","Coded by CH and revised by DR",2022-11-15,NA,99,"Ig01",NA
+"Tikopia","40","OT11","Tikopia","Firth 1967, 1970, 1961, 1940, 1936, 1930, 1939","Ravenga District","1930","SK",2022-11-07,NA,100,"Ii02","40"
+"Mbau Fijians",NA,"OQ12","Bau Fijians","1. Deane, 19212. Tippett, 19683. Toganivalu et al., 19124. Waterhouse, 18665. Williams, 1860","Bau Chiefdom, Island of Mbau","1840","AD",2022-11-14,NA,102,"Ih14",NA
+"Maori",NA,"OZ04","Maori","1. Best, 19242. Buck, 19523. Firth, 19594. Hawthorn, 1944","Nga Puhi tribe","1820","AD",2022-11-22,NA,104,"Ij02",NA
+"Western Samoans",NA,"OU08","Samoans","Turner 1884Dependable source:Stair 1897","Aana kingdom of western Upolu Island","1829","DR",2022-10-11,NA,106,"Ii14",NA
+"Marshallese",NA,"OR11","Marshallese","Spoehr 1949Kramer 1938Erdland and Neuse 1914Mason 1947","Jaluit Atoll","1900","Coded by DR and revised by DR",2022-09-30,NA,108,"If17",NA
+"Trukese","37","OR19","Chuuk","Gladwin and Sarason 1953, Gladwin 1958 ","Chuuk State, Federated States of Micronesia [Romonum Island in White]","1947","CH",2022-10-11,NA,109,"If02","37"
+"Yapese",NA,"OR22","Yapese","Furness 1910, Muller 1919, Salesius 1906, Senfft 1903, Volkens 1910","Entirety,  island","1910","SK",2022-11-08,NA,110,"If06",NA
+"Ifugao","32","OA19","Ifugao","1. Barton, 19192. Barton, 19223. Barton, 19304. Barton, 19465. Barton, 19556. Barton and Kunitz, 19357. Beyer and Barton, 1911","Kiangan group","1910","AD",2022-11-04,NA,112,"Ia03","32"
+"Koreans","25","AA01","Korea","Osgood, C.B. 1951","Sondup’o village, Samku Li town, Kanghwa Island","1947","DR",2022-11-23,NA,116,"Ed01","25"
+"Japanese",NA,"AB43","Okayama","1. Beardsley et al., 19722. De Vos, 19733. De Vos and Wagatsuma, 1961","Okayama prefecture","1950","AD",2022-10-26,NA,117,"Ed05",NA
+"Ainu",NA,"AB06","Ainu","Batchelor 1927,Wanatanabe 1964","Saru Basin, Hokkaido","1880","CH",2022-11-20,NA,118,"Ec07",NA
+"Gilyak (Nivkh)",NA,"RX02","Nivkh","Shternberg et al. 1933","Sakhalin Island","1890","CH",2022-11-21,NA,119,"Ec01",NA
+"Chukchee","24","RY02","Chukchee","Bororaz-Tan 1909","Reindeer division, Eastern Siberia, Russia","1900","CH",2022-11-21,NA,121,"Ec03","24"
+"Copper Eskimo","41","ND08","Copper Inuit","Jenness 1922Jenness 1946Jenness 1959Rasmussen 1932Stefansson 1913Stefansson 1914","Mainland division of Coronation Gulf","1915","Coded by DR and revised by DR",2022-10-28,NA,124,"Na03","41"
+"Northern Saulteaux","42","NG06","Ojibwa","Hallowell 1942Hallowell 1955Hallowell 1976aHallowell 1976bHallowell 1976cHallowell 1976dHallowell 1991","Berens River, little Grand Rapids, and Pekangekum bands","1930","DR",2022-10-17,NA,127,"Na33","42"
+"Eyak",NA,"NA07","Eyak","1. Birket-Smith and De Laguna, 19382. De Laguna, 19343. De Laguna, 1990","Entirety, tribe","1890","Coded by AD and revised by AD",2022-11-17,2023-07-21,130,"Nb05",NA
+"Haida",NA,"NE09","Haida","1. Murdock, 1934a2. Murdock, 1934b3. Murdock, 19704. Swanton, 1905","Town of Masset","1875","AD",2022-11-22,NA,131,"Nb01",NA
+"Bellacoola",NA,"NE06","Nuxalk","1. Boas, 18922. Boas, 19005. McIlwraith, 1948a6. McIlwraith, 1948b","Central village, lower Bella Coola River","1880","AD",2022-10-04,NA,132,"Nb09",NA
+"Pomo",NA,"NS18","Pomo","Kroeber 1951Loeb 1926","Cignon village, Clear Lake","1850","DR",2022-10-20,NA,135,"Nc18",NA
+"Lake Yokuts",NA,"NS29","Yokuts","Gayton 1948Beals 1958","Tulare Lake","1850","DR",2022-10-21,NA,136,"Nc24",NA
+"Klamath","44","NR10","Klamath","Gatschet, 1890;Spier, 1930; Stern, 1965","Entirety, tribe","1860","Resolved between AD and CH",2023-01-09,NA,138,"Nc08","44"
+"Hidatsa",NA,"NQ14","Hidatsa","Bowers, A.W. 1965Waheenee 1987Stewart, F.H. 2001","Not specified","1836","DR",2022-11-02,NA,141,"Ne15",NA
+"Pawnee","46","NQ18","Pawnee","Alternative PA (from White 1989, reliable primary sources):Lesser 1933","Skidi band","1867","Resolved between CH and DR then revised by DR",2023-01-09,NA,142,"Nf06","46"
+"Huron",NA,"NG05","Huron/Wendat","Heidenreich 1978, Kinietz 1940, Otterbein 1979, Tooker 1964, Trigger 1969","Bear and Cord subtribes","1634","SK",2022-10-27,NA,144,"Ng01",NA
+"Havasupai",NA,"NT14","Havasupai","Spier, L. 1928 (entire)Smithson, C.L. 1959 (partial)","Entirety, tribe.","1918","DR",2022-11-04,NA,150,"Nd03",NA
+"Papago",NA,"NU79","O’odham","Underhill, R. 1939Chona, M. 1936 ","Archie division","1910","DR",2022-11-21,NA,NA,NA,NA
+"Popoluca",NA,"NU30","Popoluca","1. Foster, 19422. Foster, 1945","Town and environs of Soteapan","1940","AD",2022-10-25,NA,154,"Nj03",NA
+"Miskito",NA,"SA15","Miskito","Conzemius 1932","Village near Cape Gracias a Dios","1921","SK",2022-11-04,NA,156,"Sa09",NA
+"Cuna","51","SB05","Kuna","1. Densmore, 19262. Holmer, 19513. Holmer and Wassén, n.d.4. McKim and Wassén, 19475. Nordenskiöld, 19296. Nordenskiöld, 19307. Nordenskiöld, 19318. Nordenskiöld et al., 19389. Nordenskiöld et al., 192810. Nordenskiöld et al., 193011. Stout, 194612. Stout, 194713. Wassén, 1949","San Blas Archipelago","1927","AD",2022-10-14,NA,158,"Sa01","51"
+"Goajiro",NA,"SC13","Goajiro","Bolinder 1957, Gutierrez de Pineda 1948, Pineda 1947, Santa Cruz 1941","Entirety: tribe","1947","SK",2022-11-07,NA,159,"Sb06",NA
+"Haitians",NA,"SV03","Haitians","Herskovits  1937","Town of Mirebalais","1935","SK",2022-11-09,NA,160,"Sb09",NA
+"Warrau",NA,"SS18","Warao","Turrado Moreno, 1945","Orinoco Delta, e.g., Winikina","1935","Coded by CH and revised by DR",2022-10-16,NA,162,"Sc01",NA
+"Yanomamo","60","SQ18","Yanoama","2. Chagnon, 19673. Chagnon, 19684. Layrisse et al., 1962","Shamatari tribe","1965","AD",2022-10-13,NA,163,"Sd09","60"
+"Carib",NA,"SR09","Barama River Carib","Gillin 1936","Barama River","1932","SK",2022-11-01,NA,164,"Sc03",NA
+"Saramacca","59","SR15","Saramaka","1. Herskovits et al., 19344. Price, 19935. Price and Price,1991","Upper Suriname River","1928","AD",2022-10-24,NA,165,"Sc06","59"
+"Cubeo (Tucano)","58","SQ19","Tukano","Goldman 1963","Village on Caduiari River","1939","DR",2022-10-17,NA,167,"Se12","58"
+"Cayapa",NA,"SD06","Chachi","1. Barrett, 1925","Río Cayapas drainage","1908","AD",2022-11-17,NA,168,"Sf03",NA
+"Aymara","53","SF05","Aymara","La Barre 1947, 1948 Tschopik 1951","Ayllu near Chucuito, Peru","1940","SK",2022-11-01,NA,172,"Sf02","53"
+"Siriono",NA,"SF21","Siriono","Holmberg, A.R. 1950","Vicinity of the Rio Blanco","1942","DR",2022-10-27,NA,NA,NA,NA
+"Shavante (Serente)",NA,"SP26","Xavante","1. Maybury-Lewis, 1967","Village of Sao Domingo","1958","AD",2022-11-08,NA,179,"Sj11",NA
+"Cayua","56","SM04","Guaraní","1. Hanke and Schütze, 19562. Métraux, 1948","Southern Mato Grosso","1890","AD",2022-10-18,NA,181,"Sj10","56"
+"Lengua",NA,"SK15","Enxet and Enlhet","Grubb 1911","Band in contact with mission","1889","DR",2022-11-01,NA,182,"Sh09",NA
+"Mapuche (Araucanians)",NA,"SG04","Mapuche","Cooper 1946; Titiev 1951; Faron 1961, 1964; Hilger 1957 ","Vicinity of Temuco","1950","SK",2022-10-06,NA,184,"Sg02",NA
+"Tehueleche","XX","SH05","Tehueleche","Musters, G. C. 1873","Entirety: Equestrian band","1870","Coded by CH and revised by DR",2022-10-11,NA,NA,NA,NA
+"Yahgan",NA,"SH06","Yahgan","Gusinde 1937, Lothrop 1928","Eastern and central divisions","1865","Coded by SK and revised by DR",2022-11-14,NA,186,"Sg01",NA
+NA,"26","AD05","Taiwan Hokkien","Hazards 2022:Gallin 1966","Hsin Hsing Village, Northern Taiwan","1959","CH",2022-11-02,NA,201,NA,"26"
+NA,"29","AR07","Khasi","Becker 1924, Gurdon 1907","NA (in EA) PA lists Khasi District, Meghalaya, India","1900","Resolved between SK and DR",2023-01-09,NA,202,"Ei08","29"
+NA,"22","AX04","Sinhalese","Yalman 1971,Tambiah 1965","Kandyan Region","1950","CH",2022-11-02,NA,203,"Eh06","22"
+"Serbs","19","EF06","Serbs","Halpern 1967","Orasac Village, Serbia, Yugoslavia","1950","CH",2022-10-24,NA,204,"Ch01","19"
+"Highland Scots","18a","ES10","Highland Scots","H2022","Isle of Lewis and Harris","1919","Resolved between SK and CH",2023-01-09,NA,205,NA,"18a"
+"Dogon","8","FA16","Dogon","Palau Martí 1957; Paulme 1940","Mopti Region, MaliSanga Region","1930","CH",2022-10-19,NA,206,"Ag03","8"
+NA,"14","MS14","Kanuri","Cohen 1960","Not Specified (Bornu State?)","1956","CH",2022-10-21,NA,207,"Cb19","14"
+"Sanusi","16","MT09","Libyan Bedouin ","Evans-Pritchard 1949, Murray 1935","Not Specified (Cyrenaica, Libya)","1920","Resolved between CH and SK",2023-01-09,NA,NA,NA,NA
+NA,"15","MW11","Shluh","Montagne 1930","Shluh tribes living in the Grand ì Atlas, Anti-Atlas, and Sous River Valley regions","1920","Resolved between CH and SK",2023-01-09,NA,209,"Cd05","15"
+NA,"43","NA12","Tlingit","Krause 1956","Chilkat Village, Klukwan/Southeastern Alaska","1880","SK",2022-10-14,NA,210,"Nb22","43"
+NA,"45","NF06","Blackfoot","Ewers 1958, 1955, Goldfrank 1966, Grinnell 1962, Hungry Wolf 1977, Lancaster 1966, Wissler 1910, 1912, 1918","Blackfeet Indian Reservation, Montana, United States","1850","SK",2022-10-11,NA,211,"Ne12","45"
+NA,"47","NM09","Iroquois","Morgan 1901 (vs 1 and 2)","Iroquois Reservations","1750","SK",2022-12-02,NA,212,"Ng10","47"
+NA,"48","NT09","Hopi","H2022","Southwest and Basin","1920","Resolved between SK and DR",2023-01-09,NA,213,"Nh18","48"
+NA,"49","NU33","Tarahumara","Bennet and Zingg 1935","Chihuahua, Mexico","1930","Resolved between CH and DR",2023-01-09,NA,214,"Ni01","49"
+NA,"50","NU44","Zapotec","Parsons 1970","Mitla","1940","Resolved between SK and DR",2023-01-09,NA,215,"Nj10","50.b"
+NA,"39","OQ06","Lau Fijians","Bryan 9999, Hocart 1929, Thompson 1940","Lau Island","1920","SK",2022-10-20,NA,217,"Ih04","39"
+NA,"23","RV02","Yakut","Jochelson 1933 (EA entire)expanded:Sieroszewski 1993Wrangal and Sabine 1842","Siberia, Russia","1900","CH",2022-10-31,NA,218,"Ec02","23"
+NA,"52","SC07","Kogi","Reichel-Dolomatoff and Muirden 1950, 1951;Park 1965","Sierra Nevada De Santa Marta, Colombia","1940","CH",2022-10-30,NA,219,"Sb02","52"
+NA,"54","SH04","Ona","Gusinde 1931","Not specified (in EA) PA lists Tierra del Fuego","1880 (in EA), PA lists 1919-23","Resolved between SK and CH",2023-01-09,NA,220,"Sg03","54"
+NA,"55","SI07","Mataco","Karsten 1932, Pelleschi 1897","Not specified","1860","SK",2022-10-20,NA,221,"Sh01","55"
+NA,"18b","SO11","Bahia Brazilians","H2022","Eastern South America","1952 (1935 also listed in EA)","SK",2022-10-11,NA,222,"So11","18b"
+NA,"57","SP08","Bororo","Lévi-Strauss 1938; Baldus and Lillios 1937","Kejara","1920","Resolved between CH and DR",2023-01-09,NA,223,"Si01","57"

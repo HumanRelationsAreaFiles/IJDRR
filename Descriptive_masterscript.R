@@ -41,24 +41,42 @@
 # figures----------------------------------------------------------------------
 
 # Figure 1 --------------------------------------------------------------------
-      ovhz <- ovhz %>% mutate(OvHz.all.count_dq12 = 
-                                rowSums(across(c(OvHz.all.count_dq12_30, OvHz.all.count_dq12_60)), 
-                                        na.rm = TRUE))
+      # call the following packages 
+      library(dplyr)
+      library(ggplot2)
+      library(rnaturalearth)
       
+      # read in data directly from csv files:
+      counts <- read.csv("DT-hz-event-level-expanded-FA.csv")
+      counts <- counts %>% filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) 
+      counts <- cbind(EVENTID = 1:nrow(counts), counts) 
+      
+      #count the number of observations per unique ID
+      events <- counts %>%
+        filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
+      events_per_soc <- events %>% distinct(OWC, EVENTID) %>%  count(OWC, name = "Number_of_hazards")
+      eventscounter <- as.data.frame(events_per_soc) 
+      #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
+      #note: this step is just for the first row, where we need to include all 132 societies even though some have
+      #no events. The other three rows can use a subset of the 132 society sample.
+      ghost_socstype <- data.frame(OWC = c("MQ08","MP19","RI03","MA11","AK05","OI20","OZ04","NE09","NE06","NS18","NS29","SQ18","SP26","SM04"), 
+                                   Number_of_hazards = 0)
+      eventsmap_df <- rbind(eventscounter, ghost_socstype)
+      colnames(eventsmap_df) <- c("OWC", "Number_of_hazards")
       
       maptable <- data.frame(Number_hazard_events = c("0", "1-10", "11-20", "21-30", "31+"),
                              Map_color = c("Yellow", "Lightgreen", "Green", "Blue", "Puprple"),
                              Number_of_cases = c(14,66,28,14,6))
       
-      maps = function(ovhz) {
+      maps = function(eventsmap_df) {
         
-        ovhz_coord <- full_join(coords, ovhz, by = "OWC") %>%
+        ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>%
           mutate(count = case_when(
-            OvHz.all.count_dq12 == 0 ~ 0,
-            OvHz.all.count_dq12 >= 0 & OvHz.all.count_dq12 <= 10 ~ 1, 
-            OvHz.all.count_dq12 >= 11 & OvHz.all.count_dq12 <= 20 ~ 2,
-            OvHz.all.count_dq12 >= 21 & OvHz.all.count_dq12 <= 30 ~ 3,
-            OvHz.all.count_dq12 > 30 ~ 4
+            Number_of_hazards == 0 ~ 0,
+            Number_of_hazards >= 0 & Number_of_hazards <= 10 ~ 1, 
+            Number_of_hazards >= 11 & Number_of_hazards <= 20 ~ 2,
+            Number_of_hazards >= 21 & Number_of_hazards <= 30 ~ 3,
+            Number_of_hazards > 30 ~ 4
           ))
         
         #do this to create MAPS 
@@ -97,7 +115,7 @@
             legend.text = element_text(size = 12),
             plot.title = element_text(size = 18))
       }
-      maps(ovhz)
+      maps(eventsmap_df)
       #map of all hazards
       samplemap  
 

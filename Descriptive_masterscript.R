@@ -105,7 +105,7 @@
 
 
 # Figure 2---------------------------------------------------------------------
-  # use hz_msp_figure.R, available here: https://github.com/HumanRelationsAreaFiles/IJDRR/blob/main/hz_msp_figure.R
+  # use hz_msp_figure.R
 
 
 # Figure 3---------------------------------------------------------------------

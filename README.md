@@ -1,5 +1,5 @@
 # **Datasets and R scripts for: "An ethnographic approach to the global study of the ecological dimensions of hazards"**
-### **King et al., *Submitted to the International Journal of Disaster Risk Reduction***
+### **Submitted to the *International Journal of Disaster Risk Reduction***
 
 
 ## **Contents**

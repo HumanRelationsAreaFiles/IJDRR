@@ -341,9 +341,9 @@
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       types_per_id <- types %>% distinct(ID, H.5.) %>%  count(ID, name = "types_experienced")
       row1_114 <- as.data.frame(types_per_id) #put those counts into a df and run summary stats
-      #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all 132 societies even though some have
-      #no events. The other three rows can use a subset of the 132 society sample.
+      #add the 14 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
+      #note: this step is just for the first row, where we need to include all societies even though some have
+      #0/no events. The other three rows can use a subset of the 132 society sample.
       ghost_socstype <- data.frame(ID = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
                                    types_experienced = 0)
       types_df <- rbind(row1_114, ghost_socstype)
@@ -363,9 +363,9 @@
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       counts_per_id <- table(all$ID) #get a count of hazards per society
       all_df114 <- as.data.frame(counts_per_id) #put those counts into a df and run summary stats
-      #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all 132 societies even though some have
-      #no events. The other three rows can use a subset of the 132 society sample.
+      #add the 14 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
+      #note: this step is just for the first row, where we need to include all societies even though some have
+      #0/no events. The other three rows can use a subset of the 132 society sample.
       ghost_socs <- data.frame(Var1 = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
                                Freq = 0)
       all_df <- rbind(all_df114, ghost_socs)
@@ -545,7 +545,7 @@
       #all results are now saved to the df "table463"
       writexl::write_xlsx(table463, "table4")
       
-      #for the addendum to table 4.6.3 (proposed by Eric Jones):
+      #for the addendum to table 4.6.3 (add means):
       table463BONUS <- data.frame(Average_for = c("GEN_only", "Dated_only", "All_events"),
                                   H.8. = c(mean(data463GEN$H.8., na.rm = TRUE), 
                                            mean(data463_205$H.8., na.rm = TRUE), 
@@ -990,7 +990,7 @@
       
       
       
-# table S12. (complete correlation across dimensions)---------------------------
+# table S12. (complete correlations across dimensions)---------------------------
       data.s12 <-  finaldata %>% filter(time %in% c(30,60)) %>%
         mutate(H.9.a. = ifelse(H.9.a. == 0.5, 1.0, H.9.a.))
       data.s12NODR <- data.s12 %>% filter(!H.5. %in% c("Dr"))

@@ -17,16 +17,13 @@ library(janitor)
 library(DSL)
 library(pastecs)
 
-# this works if the script and CSV are in the same directory
+# the script and CSV must be in the same directory
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 hz <- read.csv("Datasets/DT-hz-event-level-expanded-FA.csv")
 coords <- read.csv("Datasets/merged_coords.csv")
 
-# OVHZ TO REMOVE ----------------------------------------------------------
-ovhz <- read.csv("Datasets/DT-society-level-clean-FA.csv")
 
-
-#TRANSFORMING THE DATA 
+#CLEANING THE DATA 
   #change cases with not enough information to NA
   hz <<- hz%>%
     mutate(across(c(H.1.:H.12.,), ~ if_else((.x==77|.x==88|.x==99|.x=="NA"|.x=="Y"),NA,.x)))
@@ -93,7 +90,7 @@ ovhz <- read.csv("Datasets/DT-society-level-clean-FA.csv")
       .default = H.7.
     ))
   
-  
+  #transforms code 0.5 (inferred absence) to 1 (absent) 
   hz <<- hz%>%
     mutate(H.9.a. = case_when(H.9.a. == 0.5 ~ 1,
                               .default = H.9.a.))
@@ -111,20 +108,20 @@ ovhz <- read.csv("Datasets/DT-society-level-clean-FA.csv")
 #---------------------------------------------------------------------------------------------------------
 #creating new dataframes for analysis
 
-#modifying dataset so 1s frequency H11 are removed (only keeping occurred events and threats)
+#modifying dataset so 1s for H12 Occurrence are removed (only keeping occurred events and threats)
 hz <- hz %>%
   subset(H.12. > 1)
 
-#creates dataset where all 1s, 2s, and 99s for H12 are removed. (only occurred events)
+#creates dataset where all 1s, 2s, and 99s for H12 are removed (only occurred events)
 hz_freq_subset <- hz %>%
   subset(H.12. > 2)
   
-#creates dataset where all events only in EP 90 are removed, and all 1s, 2s, and 99s for H12 are removed. (only occurred events in time 30, 60)
+#creates dataset where all events  in EP 90 are removed, and all 1s, 2s, and 99s for H12 are removed. (only occurred events in time 30, 60)
 hz_no90 <- hz %>%
   filter(time != "90")
 
 
-#creates separate dataframes for each EP
+#creates separate dataframes for each time period
 time30.df <- hz %>%
   filter(time == "30")
 time60.df <- hz %>%
@@ -133,33 +130,16 @@ time90.df <- hz %>%
   filter(time == "90")
 
 
-#creating list for top three types of hazards (using total_types)
+#creates list for top three types of hazards (using total_types)
 top_three <- c("pests", "floods", "droughts")
 
-#creating new dataframe for top three hazards 
+#creates new dataframe for top three hazards 
 top_three_subset <- hz %>% 
   subset(total_types %in% top_three)
 
 
 #stores the number of rows in the original hz dataset
 nrow_hz <- nrow(hz)
-
-
-# OVHZ TO REMOVE ----------------------------------------------------------
-#creates separate SOCIETY LEVEL dataframes for each EP
-ovhz30 <- ovhz %>%
-  filter(period == 30)
-ovhz60 <- ovhz %>%
-  filter(period == 60)
-ovhz90 <- ovhz %>%
-  filter(period == 90)
-
-#combined society level dataframe for 30,60 EPs
-ovhz3060 <- ovhz %>%
-  filter(period == 30 | period == 60) %>%
-  select(c(OWC, OvHz.all.count_dq12, OvHz.all.scount_3_dq12, OvHz.all.div_dq12, OvHz.all.sdiv_3_dq12)) %>%
-  group_by(OWC) %>%
-  summarise_all(list(sum), na.rm = TRUE)
 
 
 # usable data set to start most things, besides hz_no90 ---------------------------------------

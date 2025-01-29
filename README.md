@@ -1,16 +1,16 @@
-# **Supplement to: "An ethnographic approach to the global study of the ecological dimensions of hazards"**
-### **King et al. 2025, *International Journal of Disaster Risk Reduction* (under review)**
+# **Datasets and R scripts for: "An ethnographic approach to the global study of the ecological dimensions of hazards"**
+### **King et al., *Submitted to the International Journal of Disaster Risk Reduction***
 
 
 ## **Contents**
   ### **Data**
-  - **DT-hz-event-level-expanded-FA.csv:** this is the main data file, containing all coded variables necessary to run all scripts
-  - **DT-meta-hz-clean.csv:** the meta data file, containing the SCCS ID, OWC term and eHRAF name for all societies in the sample
-  - **merged_coords.csv:** contains the coordinates for each society; necessary for making the map in Figure 1
+  - **DT-hz-event-level-expanded-FA.csv:** main dataset that contains all coded variables
+  - **DT-meta-hz-clean.csv:** meta data file that contains SCCS ID, OWC, and eHRAF name for all societies in the sample
+  - **merged_coords.csv:** geographic coordinates for each society; necessary for making the map in Figure 1
   ### **Scripts**
-  - **Descriptive_masterscript.R:** principal R script, containing code and user instructions to re-create all analyses and figures
+  - **Descriptive_masterscript.R:** principal R script that contains code and user instructions to re-create most analyses and figures
   - **hz.initialize.R:** required to initialize certain objects used in Descriptive_masterscript.R
-  - **hz_msp_figure.R:** to recreate the minimum spanning tree in Figure 2
+  - **hz_msp_figure.R:** script to recreate Figure 2 (minimum spanning tree)
 
 ## **Requirements**
 To run the R scripts, you will need the following:

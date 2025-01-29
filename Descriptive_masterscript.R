@@ -712,8 +712,7 @@
       writexl::write_xlsx(table.s7, "tables7")
       
       
-# table S8. (Correlations between Hz types)
-#-------------------------------------------------------------------------------
+# table S8. (Correlations between Hz types)-------------------------------------
       # start by calling Hmisc if not already
       library(Hmisc)
       

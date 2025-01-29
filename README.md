@@ -39,7 +39,8 @@ To run the R scripts, you will need the following:
     - pastecs
 You can install the required packages using:
 ```r
-install.packages(c("dplyr", "ggplot2", "rnaturalearth", "rnaturalearthdata", "Hmisc", "viridis", "scales", "igraph", "tidyr", "readxl", "tidyverse", "reshape2", "corrplot", "fauxnaif", "naniar", "ggpubr", "gridExtra", "cowplot", "sf", "janitor", "DSL", "pastecs"))```
+install.packages(c("dplyr", "ggplot2", "rnaturalearth", "rnaturalearthdata", "Hmisc", "viridis", "scales", "igraph", "tidyr", "readxl", "tidyverse", "reshape2", "corrplot", "fauxnaif", "naniar", "ggpubr", "gridExtra", "cowplot", "sf", "janitor", "DSL", "pastecs"))
+```
 
 ## **Contact**
 Contact samantha.king@yale.edu or seb.wanggaouette@yale.edu with questions. 

@@ -1,5 +1,6 @@
-# instructions to replicate all figures, analyses and supp materials in the
-# descriptive hazards paper (as of Jan 2025), assuming access to the GitHub
+# instructions to replicate all figures, analyses and supp materials in King et al., 
+# An ethnographic approach to the global study of the ecological dimensions of hazards
+# assumes access to GitHub
 
 
 
@@ -56,9 +57,8 @@
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       events_per_soc <- events %>% distinct(OWC, EVENTID) %>%  count(OWC, name = "Number_of_hazards")
       eventscounter <- as.data.frame(events_per_soc) 
-      #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all 132 societies even though some have
-      #no events. The other three rows can use a subset of the 132 society sample.
+      #add the 14 societies not included in the filtered data set, with counts cases with 0 for "Number_of_events"; 4 cases are NA for frequency of events
+      #note: this step is just for the first row, where we need to include all cases that are coded as 0/no events. 
       ghost_socstype <- data.frame(OWC = c("MQ08","MP19","RI03","MA11","AK05","OI20","OZ04","NE09","NE06","NS18","NS29","SQ18","SP26","SM04"), 
                                    Number_of_hazards = 0)
       eventsmap_df <- rbind(eventscounter, ghost_socstype)
@@ -140,8 +140,7 @@
       events_per_id <- events %>% distinct(ID, EVENTID) %>%  count(ID, name = "Number_of_hazards")
       eventscounter <- as.data.frame(events_per_id) 
       #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all 132 societies even though some have
-      #no events. The other three rows can use a subset of the 132 society sample.
+      #note: this step is just for the first row, where we need to include all societies with 0/no events. The other three rows can use a subset of the 132 society sample.
       ghost_socstype <- data.frame(ID = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
                                    Number_of_hazards = 0)
       events_df <- rbind(eventscounter, ghost_socstype)

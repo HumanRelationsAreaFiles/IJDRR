@@ -1,6 +1,7 @@
 # **Supplement to: "An ethnographic approach to the global study of the ecological dimensions of hazards"**
 ## **King et al. 2025, *International Journal of Disaster Risk Reduction* (under review)**
 
+
 ## **Contents**
   ### **Data**
   - **DT-hz-event-level-expanded-FA.csv:** this is the main data file, containing all coded variables necessary to run all scripts

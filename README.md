@@ -3,7 +3,7 @@
 
 
 ## **Contents**
-  ### **Data**
+  ### **Datasets**
   - **DT-hz-event-level-expanded-FA.csv:** main dataset that contains all coded variables
   - **DT-meta-hz-clean.csv:** meta data file that contains SCCS ID, OWC, and eHRAF name for all societies in the sample
   - **merged_coords.csv:** geographic coordinates for each society; necessary for making the map in Figure 1

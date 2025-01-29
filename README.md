@@ -1,5 +1,5 @@
 # **Supplement to: "An ethnographic approach to the global study of the ecological dimensions of hazards"**
-#     **King et al. 2025, *International Journal of Disaster Risk Reduction* (under review)**
+##   **King et al. 2025, *International Journal of Disaster Risk Reduction* (under review)**
 
 
 ## **Contents**

@@ -71,25 +71,6 @@ coords <- read.csv("Datasets/merged_coords.csv")
       .default = total_types
     ))
   
-  
-  #transforms H.7. variable to be dichotomous - 1 or 2
-  hz <<- hz %>%
-    mutate(H.7. = case_when(
-      H.7. == 1.5 &
-        (
-          H.5. == "Fl" |
-            H.5. == "Ea" |
-            H.5. == "Wi" | H.5. == "Fi" | H.5. == "Vo" |
-            H.5. == "TW" | H.5. == "SS"
-        ) ~ 2,
-      H.7. == 1.5 &
-        (H.5. == "CP" | H.5. == "DRn" | H.5. == "SW") ~ 1,
-      H.7. == 1.5 &
-        (H.5. == "PE" |
-           H.5. == "GsEp" | H.5. == "SEW" | H.5. == "ET") ~ NA,
-      .default = H.7.
-    ))
-  
   #transforms code 0.5 (inferred absence) to 1 (absent) 
   hz <<- hz%>%
     mutate(H.9.a. = case_when(H.9.a. == 0.5 ~ 1,

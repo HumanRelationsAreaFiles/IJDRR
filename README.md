@@ -13,7 +13,7 @@
 
 ## **Requirements**
 To run the R scripts, you will need the following:
-- **R ([minimum version]):**
+- **R ([minimum version]):** 4.4.1
 - **Required R packages:**
     - dplyr
     - ggplot2
@@ -38,7 +38,7 @@ To run the R scripts, you will need the following:
     - DSL
     - pastecs
 You can install the required packages using:
-`install.packages(c("dplyr", "ggplot2", "rnaturalearth", "rnaturalearthdata", "Hmisc", "viridis", "scales", "igraph", "tidyr", "readxl", "tidyverse", "reshape2", "corrplot", "fauxnaif", "naniar", "ggpubr", "gridExtra", "cowplot", "sf", "janitor", "DSL", "pastecs"))`
+```install.packages(c("dplyr", "ggplot2", "rnaturalearth", "rnaturalearthdata", "Hmisc", "viridis", "scales", "igraph", "tidyr", "readxl", "tidyverse", "reshape2", "corrplot", "fauxnaif", "naniar", "ggpubr", "gridExtra", "cowplot", "sf", "janitor", "DSL", "pastecs"))```
 
 ## **Contact**
 Contact samantha.king@yale.edu or seb.wanggaouette@yale.edu with questions. 

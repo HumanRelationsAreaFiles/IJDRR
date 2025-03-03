@@ -16,7 +16,7 @@
 
 
 # initializing-----------------------------------------------------------------
-# note: all operations in this script use the data file DT-hz-event-level-expanded-FA.csv
+# note: all operations in this script use the data file DT-hz-IJDRR.csv
 # before running the below script, run hz.initialize.R to generate the object "d"  
 #           (among others) in your local R environment
 #------------------------------------------------------------------------------
@@ -48,7 +48,8 @@
       library(rnaturalearth)
       
       # read in data directly from csv files:
-      counts <- read.csv("DT-hz-event-level-expanded-FA.csv")
+      coords <- read.csv("merged_coords.csv") 
+      counts <- read.csv("DT-hz-IJDRR.csv")
       counts <- counts %>% filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) 
       counts <- cbind(EVENTID = 1:nrow(counts), counts) 
       
@@ -65,19 +66,24 @@
       colnames(eventsmap_df) <- c("OWC", "Number_of_hazards")
       
       maptable <- data.frame(Number_hazard_events = c("0", "1-10", "11-20", "21-30", "31+"),
-                             Map_color = c("Yellow", "Lightgreen", "Green", "Blue", "Puprple"),
-                             Number_of_cases = c(14,66,28,14,6))
+                             Map_color = c("Yellow", "Lightgreen", "Green", "Blue", "Purple"),
+                             Number_of_cases = c((eventsmap_df %>% filter(Number_of_hazards == 0) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 1 & Number_of_hazards <= 10) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 11 & Number_of_hazards <= 20) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 21 & Number_of_hazards <= 30) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 31) %>% nrow())))
       
       maps = function(eventsmap_df) {
         
-        ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>%
-          mutate(count = case_when(
+        ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>% 
+            mutate(count = case_when(
             Number_of_hazards == 0 ~ 0,
             Number_of_hazards >= 0 & Number_of_hazards <= 10 ~ 1, 
             Number_of_hazards >= 11 & Number_of_hazards <= 20 ~ 2,
             Number_of_hazards >= 21 & Number_of_hazards <= 30 ~ 3,
             Number_of_hazards > 30 ~ 4
-          ))
+          )) %>%
+          filter(!is.na(Number_of_hazards)) #remove three duplicate rows
         
         #do this to create MAPS 
         world <- ne_countries(scale = "medium", returnclass = "sf")
@@ -118,7 +124,7 @@
       maps(eventsmap_df)
       #map of all hazards
       samplemap  
-
+      
 
 # Figure 2---------------------------------------------------------------------
   # use hz_msp_figure.R
@@ -130,7 +136,7 @@
       library(ggplot2)
       
       # read in data directly from csv files:
-      counts <- read.csv("DT-hz-event-level-expanded-FA.csv")
+      counts <- read.csv("DT-hz-IJDRR.csv")
       counts <- counts %>% filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) 
       counts <- cbind(EVENTID = 1:nrow(counts), counts) 
 
@@ -259,13 +265,13 @@
       hz_441 <- hz %>% filter(time %in% c(30,60)) %>%
         mutate(H.5. = ifelse(H.5. == "PD" | H.5. =="PE"|H.5.=="CP"|H.5.=="Lo", "P&D", H.5.)) %>%
         mutate(H.5. = ifelse(H.5. != "Fl"& H.5. != "Dr" & H.5. != "P&D", "Z_OTHER", H.5.)) %>%
-        filter(!is.na(H.7.)) %>%
-        mutate(H.7. = as.character(H.7.)) %>%
-        mutate(H.7. = ifelse(H.7. == 1, "Slow (1)", H.7.)) %>%  mutate(H.7. = ifelse(H.7. == 2, "Fast (2)", H.7.))
-      hz_441$H.7. <- factor(hz_441$H.7., levels = c("Slow (1)", "Fast (2)"))
+        filter(!is.na(H.7.2.)) %>%
+        mutate(H.7.2. = as.character(H.7.2.)) %>%
+        mutate(H.7.2. = ifelse(H.7.2. == 1, "Slow (1)", H.7.2.)) %>%  mutate(H.7.2. = ifelse(H.7.2. == 2, "Fast (2)", H.7.2.))
+      hz_441$H.7.2. <- factor(hz_441$H.7.2., levels = c("Slow (1)", "Fast (2)"))
       
       # make the figure
-      H7_H10_graphs(hz_441, H.7., "Onset")
+      H7_H10_graphs(hz_441, H.7.2., "Onset")
       # and display it
       var1_bargraph
 
@@ -311,7 +317,7 @@
       
       #read in data
       meta <- read.csv("DT-meta-hz-clean.csv") 
-      finaldata <- read.csv("DT-hz-event-level-expanded-FA.csv") 
+      finaldata <- read.csv("DT-hz-IJDRR.csv") 
       
       
 # "sample" table----------------------------------------------------
@@ -320,7 +326,7 @@
         OWCcount_full_dataset = length(unique(finaldata$OWC)),  #number of unique values in OWC
         OWCcount_full_dataset3060 = length(unique(finaldata$OWC[finaldata$time %in% c(30, 60)]))  #unique OWC values where time is 30 or 60
       )
-      view(sample) # to get the values
+      print(sample) # to get the values
       
       #second half
       meta_OWC <- unique(meta$OWC)
@@ -355,7 +361,7 @@
         Median = median(types_df$Number_of_hztypes_experienced),
         Standard_dev = sd(types_df$Number_of_hztypes_experienced),
         Society_count = c(128),
-        Event_count = c(1575)
+        Event_count = c(4664)
       )
       
       #row 2: all events
@@ -377,7 +383,7 @@
         Median = median(all_df$Number_of_events),
         Standard_dev = sd(all_df$Number_of_events),
         Society_count = c(128),
-        Event_count = c(1575)
+        Event_count = c(4664)
       )
       
       #row 3: droughts
@@ -430,6 +436,7 @@
       )
       #each row is now saved as a separate data frame. combine into "table421"
       table421 <- bind_rows(type_freqs, freqs_all,freqs_dr,freqs_fl,freqs_pd)
+      table421 <- table421 %>% select(Society_count, Event_count, Average, Minimum, Median, Maximum, Standard_dev)
       #and save
       writexl::write_xlsx(table421, "table1")
       
@@ -441,7 +448,7 @@
       
       
       
-# table 3 (4.6.1. - Significant Corrs Across H8, H7, H9)-----------------------------
+# table 3 (4.6.1. - Significant Corrs Across H8, H7.2, H9)-----------------------------
       data461 <- finaldata %>%
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) %>%
         mutate(H.9.a. = ifelse(H.9.a. == 0.5, 1.0, H.9.a.))
@@ -467,10 +474,10 @@
       row3 <- getrho(data461, "H.8.", "H.9.c.")
       row4 <- getrho(data461, "H.8.", "H.9.d.")
       row5 <- getrho(data461, "H.8.", "H.10.")
-      row6 <- getrho(data461, "H.7.", "H.9.a.")
-      row7 <- getrho(h9arhoNODR, "H.7.", "H.9.a.")
-      row8 <- getrho(data461, "H.7.", "H.9.d.")
-      row9 <- getrho(data461, "H.7.", "H.10.")
+      row6 <- getrho(data461, "H.7.2.", "H.9.a.")
+      row7 <- getrho(h9arhoNODR, "H.7.2.", "H.9.a.")
+      row8 <- getrho(data461, "H.7.2.", "H.9.d.")
+      row9 <- getrho(data461, "H.7.2.", "H.10.")
       
       table461 <- data.frame(Vars = c("H8_H9a","H8_H9b","H8_H9c","H8_H9d","H8_H10",
                                       "H7_H9a","H7_H9aNODR","H7_H9d","H7_H10"),
@@ -493,7 +500,7 @@
       #for the box in table 4.6.3 labeled "Number of dated events in time30+time60",  
       #use the value of the number of observations in this data frame (dated3060).
       #For "% of dated events in time30+time60", divide 
-      #that count by the number of obs. in the df "all" (should be 1424)
+      #that count by the number of obs. in the df "all" (should be 4664)
       
       data463 <- dated3060 %>%  filter(!H.12. %in% c(1, 2) & !is.na(H.12.))
       data463_205 <- finaldata %>% filter(time %in% c(30, 60) & !H.2.a. %in% c("GEN"))
@@ -502,13 +509,13 @@
                                             H.2.b. %in% c("GEN"))
       data463ALL <- finaldata %>%  filter(time %in% c(30, 60))
       
-      fast <- data463 %>% filter(H.7. %in% c(2)) %>%
+      fast <- data463 %>% filter(H.7.2. %in% c(2)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
-      slow <- data463 %>% filter(H.7. %in% c(1)) %>%
+      slow <- data463 %>% filter(H.7.2. %in% c(1)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
       data463dr <- slow %>% filter(H.5.%in% c("Dr")) 
       data463nodr <- slow %>% filter(!H.5. %in% c("Dr"))
-      data463NAs <- data463 %>% filter(is.na(H.7.)) %>%
+      data463NAs <- data463 %>% filter(is.na(H.7.2.)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
       data463onlystart <- finaldata %>% filter(time %in% c(30, 60) & !H.2.a. %in% c("GEN")
                                                & H.2.b. %in% c("GEN"))
@@ -617,7 +624,7 @@
       library(dplyr)
       
       #read in data directly from csv
-      finaldata <- read.csv("DT-hz-event-level-expanded-FA.csv")
+      finaldata <- read.csv("DT-hz-IJDRR.csv")
       
       
       
@@ -1114,7 +1121,7 @@
       library(tidyverse)
       
       # read in the data directly from csv format
-      haz <- read.csv("DT-hz-event-level-expanded-FA.csv")
+      haz <- read.csv("DT-hz-IJDRR.csv")
       str(haz)
       haz <- haz %>%
         mutate(H.5. = str_replace_all(H.5., "\\s", ""))

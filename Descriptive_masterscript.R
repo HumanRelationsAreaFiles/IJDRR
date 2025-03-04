@@ -633,25 +633,45 @@
 # table S4. (hazard types)------------------------------------------------------
       data.s4 <- finaldata %>%
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) %>%
+        mutate(H.5. = case_when(H.5. %in% c("Er") ~ "ER", TRUE ~ H.5.)) %>%
         mutate(H.5. = case_when(H.5. %in% c("PD", "Lo", "CP", "PE") ~ "P&D", TRUE ~ H.5.))
+      data.s4PD <- finaldata %>%
+        filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       table.s4 <- data.s4 %>%
         group_by(H.5.) %>%
         summarise(Total_events = n(),
-                  Percent_total_ev = (Total_events / 1424) * 100,
+                  Percent_total_ev = (Total_events / 4426) * 100,
                   Societies = n_distinct(ID), 
                   Percent_total_soc = (Societies / 132) * 100) %>% 
         arrange(desc(Total_events)) %>%  
-        mutate(rank = row_number())      
+        mutate(rank = row_number()) 
       
-      PDspecifics <- data.frame(H.5. = c("P&D_CP","P&D_Lo","P&D_PD","P&D_PE"),
-                                Total_events = c(48,24,7,98),
-                                Percent_total_ev = c(3.370787,1.685393,
-                                                     0.491573,6.882022),
-                                Societies = c(10,8,4,25),
-                                Percent_total_soc = c(7.575758,6.060606,
-                                                      3.030303,18.93939),
-                                rank = c(3,3,3,3))
+      #Calculate summary stats for specific P&D event types
+      PDs <- c("CP", "Lo", "PD", "PE")
+      result_list <- list()
+      for (val in PDs) {
+        subset_data <- subset(data.s4PD, H.5. == val)
+        num_evts <- nrow(subset_data)
+        percentage_evts <- ((num_evts / 4426) * 100)
+        socs <- length(unique(subset_data$ID))
+        percent_socs <- ((socs / 132) * 100)
+        result_df <- data.frame(
+          H.5. = val,
+          Total_events = num_evts,
+          Percent_total_ev = percentage_evts,
+          Societies = socs,
+          Percent_total_soc = percent_socs,
+          rank = c(3,3,3,3)
+        )
+        
+        # Store in the list
+        result_list[[val]] <- result_df
+      }
       
+      # Combine results into a single data frame
+      PDspecifics <- do.call(rbind, result_list)
+      
+      #Write the final df
       table.s4 <- bind_rows(table.s4, PDspecifics)
       
       writexl::write_xlsx(table.s4, "S4")
@@ -696,7 +716,7 @@
       table.s6 <- data.frame(Subset = c("Total_dataset", "NA_events","Absent-rare_events",
                                         "Threats","All-occurred","All-occurred_subsample","Subsample_gen","Subsample_dated",
                                         "time30all","30_gen","30_dated","time60all","60gen","60dated","time90all","90gen", "90dated"),
-                             Count = c(Counts1, Counts2), Percent_all = c(((Counts1/1575)*100), ((Counts2/1504)*100)), Num_soc = Societies, 
+                             Count = c(Counts1, Counts2), Percent_all = c(((Counts1/4664)*100), ((Counts2/4618)*100)), Num_soc = Societies, 
                              Percent_socs = c((Societies/132)*100))
       writexl::write_xlsx(table.s6,"S6")
       
@@ -705,7 +725,7 @@
 # table S7. (Missing Data by Dimension)-----------------------------------------
       data.s7 <- finaldata %>% 
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
-      cols_of_interest <- c("H.7.", "H.8.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.", "H.10.")
+      cols_of_interest <- c("H.7.2.", "H.8.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.", "H.10.")
       coded_obs <- colSums(!is.na(data.s7[cols_of_interest])) #calculate number of non-na observations for each col
       na_obs <- colSums(is.na(data.s7[cols_of_interest])) #and number of na observations
       totals <- coded_obs + na_obs
@@ -746,7 +766,7 @@
       correlation_data <- presence_matrix %>% select(-OWC)
       
       #  put in order
-      desired_order <- c("Dr", "Ea", "ER", "Fi", "Fl", "GsEp", "Hu", "PD", "SEW", "SS", "Th", "Wi")  # Update this list as needed
+      desired_order <- c("Dr", "Ea", "ER", "Fi", "Fl", "GsEp", "Hu", "Li", "PD", "SEW", "SS", "Wi")  # Update this list as needed
       
       correlation_data <- correlation_data[, desired_order]
       
@@ -757,16 +777,18 @@
       # Extract correlation coefficients and p-values
       correlation_matrix <- correlation_results$r
       p_value_matrix <- correlation_results$P
+      obs_count <- correlation_results$n
       Rhos <- as.data.frame(as.table(correlation_matrix))
       Ps <- as.data.frame(as.table(p_value_matrix))
-      table.s8 <- cbind(Rhos, Ps$Freq)
-      names(table.s8) <- c("Hz type 1", "Hz type 2", "Rho", "p-value")
+      Ns <- as.data.frame(as.table(obs_count))
+      table.s8 <- cbind(Rhos, Ps$Freq, Ns$Freq)
+      names(table.s8) <- c("Hz type 1", "Hz type 2", "Rho", "p-value", "n")
       #remove duplicates
       table.s8 <- table.s8[!duplicated(t(apply(table.s8[, c("Hz type 1", "Hz type 2")], 1, sort))), ]
-      table.s8 <- table.s8[!(table.s8[["Hz type 1"]] == "SEW" & table.s8[["Hz type 2"]] == "SS" | 
-                               table.s8[["Hz type 1"]] == "SS" & table.s8[["Hz type 2"]] == "SEW"), ]
+      #table.s8 <- table.s8[!(table.s8[["Hz type 1"]] == "SEW" & table.s8[["Hz type 2"]] == "SS" | 
+      #                         table.s8[["Hz type 1"]] == "SS" & table.s8[["Hz type 2"]] == "SEW"), ]
       table.s8 <- table.s8[table.s8$`Hz type 1` != table.s8$`Hz type 2`, ]
-      table.s8 <- table.s8[order(table.s8$`p-value`), ]
+      #table.s8 <- table.s8[order(table.s8$`p-value`), ]
       writexl::write_xlsx(table.s8, "S8")
       
       
@@ -776,12 +798,13 @@
       
 # table S9. (predictability of Hz by type)-------------------------------------
       data.s9 <- finaldata %>% filter(time %in% c(30,60)) %>%
+        mutate(H.5. = ifelse(H.5. %in% c("Er"), "ER", H.5.)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", "PD"), "P&D", H.5.))
       
       #get flat counts
       table.s9 <- data.s9 %>%
         group_by(H.5.) %>%
-        summarize(
+        summarize( #note: this may throw an error when using R 4.4.1
           total_count = n(),
           #unpredictable
           Unpred = sum(H.8. == 1, na.rm = TRUE),
@@ -800,7 +823,7 @@
           Median = median(c(rep(1, Unpred), rep(2, Mod), rep(3, Very))),
           Min = min(c(rep(1, Unpred), rep(2, Mod), rep(3, Very))),
           SD = sd(c(rep(1, Unpred), rep(2, Mod), rep(3, Very)))
-        ) %>%
+        )%>%
         rename(Hz = H.5.)
 
       #add a row with all the totals
@@ -837,7 +860,8 @@
       
       
       
-#table S9b. (Wilcoxon rank sums test for floods vs. droughts)-------------------
+#table S10. (Wilcoxon rank sums test for floods vs. droughts)-------------------
+      #this was formerly table S9b.
       s9bfl <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Fl"))
       s9bdr <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Dr"))
       
@@ -851,7 +875,7 @@
       mean_ranks_Fl <- mean(ranks_Fl)
       
       table.s9b1 <- data.frame(Hz_type = c("Dr", "Fl", "Total"), Num_events =
-                                 c(293,220,513), Mean_rank = c(mean_ranks_Dr,mean_ranks_Fl,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_Fl,NA))
+                                 c(536,842,1378), Mean_rank = c(mean_ranks_Dr,mean_ranks_Fl,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_Fl,NA))
       writexl::write_xlsx(table.s9b1, "S9b-1")
       
       #part 2: calculate the actual U and W scores
@@ -890,25 +914,27 @@
       #table.s9b2 and table.s9b3
       
       
-#table S10 (frequency of hazards by onset (fast vs slow - H7 = 2 vs H7 = 1)--------
+#table S11 (frequency of hazards by onset (fast vs slow - H7 = 2 vs H7 = 1)--------
+      #this was formerly S10.
       data.s10FAST <- finaldata %>%  filter(time %in% c(30, 60)) %>%
+        mutate(H.5. = ifelse(H.5. %in% c("Er"), "ER", H.5.)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", "PD"), "P&D", H.5.)) %>%
-        filter(H.7. %in% c(2))
+        filter(H.7.2. %in% c(2))
       data.s10SLOW <- finaldata %>%  filter(time %in% c(30, 60)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", "PD"), "P&D", H.5.)) %>%
-        filter(H.7. %in% c(1))
+        filter(H.7.2. %in% c(1))
       
       table.s10FAST <- data.s10FAST %>%
         group_by(H.5.) %>%
         summarise(n = n(),
-                  Percent_total = (n / 893) * 100) %>%  
+                  Percent_total = (n / 3118) * 100) %>%  
         arrange(desc(n)) %>%
         mutate(rank = row_number())
       
       table.s10SLOW <- data.s10SLOW %>%
         group_by(H.5.) %>%
         summarise(n = n(),
-                  Percent_total = (n / 436) * 100) %>%  
+                  Percent_total = (n / 849) * 100) %>%  
         arrange(desc(n)) %>%
         mutate(rank = row_number())
       

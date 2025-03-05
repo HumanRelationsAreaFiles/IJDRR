@@ -1,6 +1,6 @@
 # instructions to replicate all figures, analyses and supp materials in King et al., 
 # An ethnographic approach to the global study of the ecological dimensions of hazards
-# assumes access to GitHub
+# assumes access to GitHub (https://github.com/HumanRelationsAreaFiles/IJDRR)
 
 
 

@@ -174,12 +174,12 @@
         geom_bar(stat = "identity", fill = "yellowgreen") +
         
         # Add vertical lines for mean and median, and map them to aesthetics for the legend
-        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 12.5", linetype = "Mean - 12.5"), size = 1) +
-        geom_vline(aes(xintercept = median_hazard, color = "Median - 9", linetype = "Median - 9"), size = 1) +
+        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 2.5", linetype = "Mean - 2.5"), size = 1) +
+        geom_vline(aes(xintercept = median_hazard, color = "Median - 1", linetype = "Median - 1"), size = 1) +
         
         # Define colors and line types for the legend
-        scale_color_manual(name = NULL, values = c("Mean - 12.5" = "darkgreen", "Median - 9" = "purple")) +
-        scale_linetype_manual(name = NULL, values = c("Mean - 12.5" = "dashed", "Median - 9" = "solid")) +
+        scale_color_manual(name = NULL, values = c("Mean - 2.5" = "darkgreen", "Median - 1" = "purple")) +
+        scale_linetype_manual(name = NULL, values = c("Mean - 2.5" = "dashed", "Median - 1" = "solid")) +
         
         # Set axis labels
         labs(x = "Number of hazard events", y = "Number of societies") +
@@ -1044,13 +1044,13 @@
       }
       
       
-      table.s12 <- do.call(rbind, list(getrho(data.s12, "H.7.","H.8."), 
-                                       getrho(data.s12, "H.7.","H.9.a."),
-                                       getrho(data.s12NODR, "H.7.","H.9.a."),
-                                       getrho(data.s12, "H.7.","H.9.b."),
-                                       getrho(data.s12, "H.7.","H.9.c."),
-                                       getrho(data.s12, "H.7.","H.9.d."),
-                                       getrho(data.s12, "H.7.","H.10."),
+      table.s12 <- do.call(rbind, list(getrho(data.s12, "H.7.2.","H.8."), 
+                                       getrho(data.s12, "H.7.2.","H.9.a."),
+                                       getrho(data.s12NODR, "H.7.2.","H.9.a."),
+                                       getrho(data.s12, "H.7.2.","H.9.b."),
+                                       getrho(data.s12, "H.7.2.","H.9.c."),
+                                       getrho(data.s12, "H.7.2.","H.9.d."),
+                                       getrho(data.s12, "H.7.2.","H.10."),
                                        
                                        getrho(data.s12, "H.8.","H.9.a."),
                                        getrho(data.s12, "H.8.","H.9.b."),

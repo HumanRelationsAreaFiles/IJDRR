@@ -161,8 +161,8 @@
       
       
       # Calculate mean and median of the x-axis (number of hazard events)
-      mean_hazard <- mean(data421$Number_of_societies, na.rm = TRUE)
-      median_hazard <- median(data421$Number_of_societies, na.rm = TRUE)
+      mean_hazard <- mean(data421$Number_of_hazards, na.rm = TRUE)
+      median_hazard <- median(data421$Number_of_hazards, na.rm = TRUE)
       # Turn them into dynamic labels
       mean_label <- paste("Mean -", round(mean_hazard, 1))
       median_label <- paste("Median -", median_hazard)
@@ -174,12 +174,12 @@
         geom_bar(stat = "identity", fill = "yellowgreen") +
         
         # Add vertical lines for mean and median, and map them to aesthetics for the legend
-        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 2.5", linetype = "Mean - 2.5"), size = 1) +
-        geom_vline(aes(xintercept = median_hazard, color = "Median - 1", linetype = "Median - 1"), size = 1) +
+        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 49.9", linetype = "Mean - 49.9"), size = 1) +
+        geom_vline(aes(xintercept = median_hazard, color = "Median - 44", linetype = "Median - 44"), size = 1) +
         
         # Define colors and line types for the legend
-        scale_color_manual(name = NULL, values = c("Mean - 2.5" = "darkgreen", "Median - 1" = "purple")) +
-        scale_linetype_manual(name = NULL, values = c("Mean - 2.5" = "dashed", "Median - 1" = "solid")) +
+        scale_color_manual(name = NULL, values = c("Mean - 49.9" = "darkgreen", "Median - 44" = "purple")) +
+        scale_linetype_manual(name = NULL, values = c("Mean - 49.9" = "dashed", "Median - 44" = "solid")) +
         
         # Set axis labels
         labs(x = "Number of hazard events", y = "Number of societies") +
@@ -440,6 +440,87 @@
       #and save
       writexl::write_xlsx(table421, "table1")
       
+
+      
+      
+      
+      
+      
+# table 2 (severity of top Hz types; formerly table S11)------------------------------------------
+      only.5h9a <- nrow(finaldata %>% filter(H.9.a. %in% c(0.5))) #get the number of events coded 0.5 for H.9.a.(answer: 660)
+      data.s11 <- finaldata %>% filter(time %in% c(30,60)) %>%
+        mutate(H.9.a. = ifelse(H.9.a. == 0.5, 1.0, H.9.a.))
+      droughts.s11 <- data.s11 %>% filter(H.5. %in% c("Dr"))
+      floods.s11 <- data.s11 %>% filter(H.5. %in% c("Fl"))
+      PD.s11 <- data.s11 %>%   mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", 
+                                                                "PD"), "P&D", H.5.)) %>%
+        filter(H.5. %in% c("P&D"))
+      
+      #write a new function to summarize each variable
+      generate_summary <- function(data, df_name) {
+        relevant_vars <- c("H.10.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.")
+        summary_data <- lapply(relevant_vars, function(var) {
+          total_NAs <- sum(is.na(data[[var]])) #get a count of the NAs before filtering them out
+          values <- data[[var]][!is.na(data[[var]])] #filter out NAs for given variable
+          value_counts <- as.data.frame(table(factor(values, levels = c(1, 1.5, 2, 2.5, 3, 3.5, 4))))
+          colnames(value_counts) <- c("Value", "Count") #generate counts for each unique value
+          total <- sum(value_counts$Count, na.rm = TRUE)
+          total_sev <- sum(value_counts$Count[as.numeric(as.character(value_counts$Value)) >= 3], na.rm = TRUE)
+          percent_sev <- (total_sev / total) * 100
+          #combine the results for the given variable
+          result <- data.frame(t(value_counts$Count), total_NAs, total, total_sev, percent_sev)
+          rownames(result) <- var
+          return(result)
+        })
+        
+        # Bind rows of summary data for each variable
+        summary_data <- do.call(rbind, summary_data)
+        
+        # Rename columns to match unique value names for clarity
+        colnames(summary_data)[1:7] <- paste0("Count_", c(1, 1.5, 2, 2.5, 3, 3.5, 4))
+        
+        # Add a column indicating the source data frame name
+        summary_data$source_df <- df_name
+        
+        return(summary_data)
+      }
+      
+      #run the function on each subset of data
+      summary_all <- generate_summary(data.s11, "s11.all")
+      summary_droughts <- generate_summary(droughts.s11, "droughts.s11")
+      summary_floods <- generate_summary(floods.s11, "floods.s11")
+      summary_PD <- generate_summary(PD.s11, "PD.s11")
+      
+      
+      #combine all summaries into one data frame
+      table.s11 <- bind_rows(summary_all, summary_droughts, summary_floods, summary_PD)
+      
+      #add summary stats
+      values <- c(1, 1.5, 2, 2.5, 3, 3.5, 4)
+      
+      calculate_stats <- function(row) {
+        # Repeat each value according to the corresponding count in the row
+        expanded_data <- unlist(mapply(rep, values, row))
+        
+        mean_value <- mean(expanded_data)
+        min_value <- min(expanded_data)
+        median_value <- median(expanded_data)
+        max_value <- max(expanded_data)
+        sd_value <- sd(expanded_data)
+        
+        return(c(Mean = mean_value, Min = min_value, Median = median_value, Max = max_value, SD = sd_value))
+      }
+      
+      stats <- t(apply(table.s11[, c("Count_1", "Count_1.5", "Count_2", "Count_2.5", "Count_3", "Count_3.5", "Count_4")], 1, calculate_stats))
+      
+      table.s11$Mean <- stats[, "Mean"]
+      table.s11$Min <- stats[, "Min"]
+      table.s11$Median <- stats[, "Median"]
+      table.s11$Max <- stats[, "Max"]
+      table.s11$SD <- stats[, "SD"]
+      
+      #save it all to an excel file
+      writexl::write_xlsx(table.s11, "S11")     
       
       
       
@@ -940,84 +1021,6 @@
       
       writexl::write_xlsx(table.s10FAST, "S10_pt1")
       writexl::write_xlsx(table.s10SLOW, "S10_pt2")
-      
-      
-# table S11 (severity of top Hz types)------------------------------------------
-      only.5h9a <- nrow(finaldata %>% filter(H.9.a. %in% c(0.5))) #get the number of events coded 0.5 for H.9.a.(answer: 183)
-      data.s11 <- finaldata %>% filter(time %in% c(30,60)) %>%
-        mutate(H.9.a. = ifelse(H.9.a. == 0.5, 1.0, H.9.a.))
-      droughts.s11 <- data.s11 %>% filter(H.5. %in% c("Dr"))
-      floods.s11 <- data.s11 %>% filter(H.5. %in% c("Fl"))
-      PD.s11 <- data.s11 %>%   mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", 
-                                                                "PD"), "P&D", H.5.)) %>%
-        filter(H.5. %in% c("P&D"))
-      
-      #write a new function to summarize each variable
-      generate_summary <- function(data, df_name) {
-        relevant_vars <- c("H.10.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.")
-        summary_data <- lapply(relevant_vars, function(var) {
-          total_NAs <- sum(is.na(data[[var]])) #get a count of the NAs before filtering them out
-          values <- data[[var]][!is.na(data[[var]])] #filter out NAs for given variable
-          value_counts <- as.data.frame(table(factor(values, levels = c(1, 1.5, 2, 2.5, 3, 3.5, 4))))
-          colnames(value_counts) <- c("Value", "Count") #generate counts for each unique value
-          total <- sum(value_counts$Count, na.rm = TRUE)
-          total_sev <- sum(value_counts$Count[as.numeric(as.character(value_counts$Value)) >= 3], na.rm = TRUE)
-          percent_sev <- (total_sev / total) * 100
-          #combine the results for the given variable
-          result <- data.frame(t(value_counts$Count), total_NAs, total, total_sev, percent_sev)
-          rownames(result) <- var
-          return(result)
-        })
-        
-        # Bind rows of summary data for each variable
-        summary_data <- do.call(rbind, summary_data)
-        
-        # Rename columns to match unique value names for clarity
-        colnames(summary_data)[1:7] <- paste0("Count_", c(1, 1.5, 2, 2.5, 3, 3.5, 4))
-        
-        # Add a column indicating the source data frame name
-        summary_data$source_df <- df_name
-        
-        return(summary_data)
-      }
-      
-      #run the function on each subset of data
-      summary_all <- generate_summary(data.s11, "s11.all")
-      summary_droughts <- generate_summary(droughts.s11, "droughts.s11")
-      summary_floods <- generate_summary(floods.s11, "floods.s11")
-      summary_PD <- generate_summary(PD.s11, "PD.s11")
-      
-      
-      #combine all summaries into one data frame
-      table.s11 <- bind_rows(summary_all, summary_droughts, summary_floods, summary_PD)
-      
-      #add summary stats
-      values <- c(1, 1.5, 2, 2.5, 3, 3.5, 4)
-      
-      calculate_stats <- function(row) {
-        # Repeat each value according to the corresponding count in the row
-        expanded_data <- unlist(mapply(rep, values, row))
-        
-        mean_value <- mean(expanded_data)
-        min_value <- min(expanded_data)
-        median_value <- median(expanded_data)
-        max_value <- max(expanded_data)
-        sd_value <- sd(expanded_data)
-        
-        return(c(Mean = mean_value, Min = min_value, Median = median_value, Max = max_value, SD = sd_value))
-      }
-      
-      stats <- t(apply(table.s11[, c("Count_1", "Count_1.5", "Count_2", "Count_2.5", "Count_3", "Count_3.5", "Count_4")], 1, calculate_stats))
-      
-      table.s11$Mean <- stats[, "Mean"]
-      table.s11$Min <- stats[, "Min"]
-      table.s11$Median <- stats[, "Median"]
-      table.s11$Max <- stats[, "Max"]
-      table.s11$SD <- stats[, "SD"]
-      
-      #save it all to an excel file
-      writexl::write_xlsx(table.s11, "S11")     
-      
       
       
       

@@ -73,6 +73,41 @@
                                                  (eventsmap_df %>% filter(Number_of_hazards >= 21 & Number_of_hazards <= 30) %>% nrow()),
                                                  (eventsmap_df %>% filter(Number_of_hazards >= 31) %>% nrow())))
       
+      #make histograms to determine appropriate color bins for the map
+        #STURGES (|log2n+1| where n = total obs.)
+        ggplot(eventsmap_df, aes(x = Number_of_hazards)) +
+          geom_histogram(bins = nclass.Sturges(eventsmap_df$Number_of_hazards), 
+                         fill = "lightblue", 
+                         color = "black") +
+          labs(title = "Sturges",
+               x = "Number of Hazards",
+               y = "Number of Societies") +
+          theme_minimal()
+        #SCOTT ((3.5*STDEV)/(n^(1/3)))
+        scott_bins <- 3.5 * sd(eventsmap_df$Number_of_hazards, na.rm = TRUE) / length(eventsmap_df$Number_of_hazards)^(1/3)
+        # Create the histogram with ggplot2
+        ggplot(eventsmap_df, aes(x = Number_of_hazards)) +
+          geom_histogram(binwidth = scott_bins, 
+                         fill = "lightblue", 
+                         color = "black") +
+          labs(title = "Scott",
+               x = "Number of Hazards",
+               y = "Number of Societies") +
+          theme_minimal()
+        #FREEDMAN-DIACONIS ((2*IQR)/(n^(1/3)))
+        iqr <- IQR(eventsmap_df$Number_of_hazards, na.rm = TRUE)  # compute IQR
+        n <- length(eventsmap_df$Number_of_hazards)  # compute n
+        fd_bins <- (2 * iqr) / (n^(1/3)) 
+        ggplot(eventsmap_df, aes(x = Number_of_hazards)) +
+          geom_histogram(binwidth = fd_bins, 
+                         fill = "lightblue", 
+                         color = "black") +
+          labs(title = "Freedman-Diaconis",
+               x = "Number of Hazards",
+               y = "Number of Societies") +
+          theme_minimal()
+    
+      #write a function to make the map
       maps = function(eventsmap_df) {
         
         ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>% 
@@ -122,7 +157,7 @@
             plot.title = element_text(size = 18))
       }
       maps(eventsmap_df)
-      #map of all hazards
+      #finally, view the map object
       samplemap  
       
 

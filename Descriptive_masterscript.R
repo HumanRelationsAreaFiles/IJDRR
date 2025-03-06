@@ -396,7 +396,7 @@
         Median = median(types_df$Number_of_hztypes_experienced),
         Standard_dev = sd(types_df$Number_of_hztypes_experienced),
         Society_count = c(128),
-        Event_count = c(4664)
+        Event_count = c(nrow(types))
       )
       
       #row 2: all events
@@ -418,7 +418,7 @@
         Median = median(all_df$Number_of_events),
         Standard_dev = sd(all_df$Number_of_events),
         Society_count = c(128),
-        Event_count = c(4664)
+        Event_count = c(sum(all_df$Number_of_events))
       )
       
       #row 3: droughts

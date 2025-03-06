@@ -33,7 +33,7 @@ h <- h %>%
     "Windstorm" = Wi,
     "Great storm/extreme precipitation" = GsEp,
     "Hurricane" = Hu,
-    "Lightning storm" = Li,
+    "Lightning" = Li,
     Fire = Fi,
     "Severe, early, or long winter" = SEW,
     Earthquake = Ea,
@@ -82,7 +82,7 @@ tree_hz_1 <-
   ggraph(gmc, 'stress') + 
   geom_node_point(aes(color = count, size = count), alpha = 0.9) +  
   geom_edge_link(alpha = 0.5) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 5) +
+  geom_node_text(aes(label = name), hjust = 0, repel = TRUE, size = 5) +
   theme_graph(base_size = 17) +
   scale_color_viridis_c(option = "D", limits = c(1, 60), direction = -1) +  
   scale_size_continuous(range = c(2, 10), guide = "none") +  
@@ -97,7 +97,7 @@ tree_hz_2 <-
   ggraph(gmc, 'stress') + 
   geom_node_point(aes(color = count, size = count), alpha = 0.8) +  
   geom_edge_link(alpha = 0.5) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 5) +
+  geom_node_text(aes(label = name), hjust = 0, repel = TRUE, size = 5) +
   theme_graph(base_size = 17) +
   scale_color_gradientn(colors = faded_viridis, limits = c(1, 60), name = "Societies with hazard type") +  # Apply the faded and reversed color scale
   scale_size_continuous(range = c(2, 10), guide = "none") +  

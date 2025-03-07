@@ -302,13 +302,13 @@
       hz_441 <- hz %>% filter(time %in% c(30,60)) %>%
         mutate(H.5. = ifelse(H.5. == "PD" | H.5. =="PE"|H.5.=="CP"|H.5.=="Lo", "P&D", H.5.)) %>%
         mutate(H.5. = ifelse(H.5. != "Fl"& H.5. != "Dr" & H.5. != "P&D", "Z_OTHER", H.5.)) %>%
-        filter(!is.na(H.7.2.)) %>%
-        mutate(H.7.2. = as.character(H.7.2.)) %>%
-        mutate(H.7.2. = ifelse(H.7.2. == 1, "Slow (1)", H.7.2.)) %>%  mutate(H.7.2. = ifelse(H.7.2. == 2, "Fast (2)", H.7.2.))
-      hz_441$H.7.2. <- factor(hz_441$H.7.2., levels = c("Slow (1)", "Fast (2)"))
+        filter(!is.na(H.7.)) %>%
+        mutate(H.7. = as.character(H.7.)) %>%
+        mutate(H.7. = ifelse(H.7. == 1, "Slow (1)", H.7.)) %>%  mutate(H.7. = ifelse(H.7. == 2, "Fast (2)", H.7.))
+      hz_441$H.7. <- factor(hz_441$H.7., levels = c("Slow (1)", "Fast (2)"))
       
       # make the figure
-      H7_H10_graphs(hz_441, H.7.2., "Onset")
+      H7_H10_graphs(hz_441, H.7., "Onset")
       # and display it
       var1_bargraph
 
@@ -501,7 +501,7 @@
           values <- data[[var]][!is.na(data[[var]])] #filter out NAs for given variable
           value_counts <- as.data.frame(table(factor(values, levels = c(1, 1.5, 2, 2.5, 3, 3.5, 4))))
           colnames(value_counts) <- c("Value", "Count") #generate counts for each unique value
-          total <- sum(value_counts$Count, na.rm = TRUE)
+          total <- nrow(data) #old version: sum(value_counts$Count, na.rm = TRUE)
           total_sev <- sum(value_counts$Count[as.numeric(as.character(value_counts$Value)) >= 3], na.rm = TRUE)
           percent_sev <- (total_sev / total) * 100
           #combine the results for the given variable
@@ -566,7 +566,7 @@
       
       
       
-# table 3 (4.6.1. - Significant Corrs Across H8, H7.2, H9)-----------------------------
+# table 3 (4.6.1. - Significant Corrs Across H8, H7, H9)-----------------------------
       data461 <- finaldata %>%
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) %>%
         mutate(H.9.a. = ifelse(H.9.a. == 0.5, 1.0, H.9.a.))
@@ -592,10 +592,10 @@
       row3 <- getrho(data461, "H.8.", "H.9.c.")
       row4 <- getrho(data461, "H.8.", "H.9.d.")
       row5 <- getrho(data461, "H.8.", "H.10.")
-      row6 <- getrho(data461, "H.7.2.", "H.9.a.")
-      row7 <- getrho(h9arhoNODR, "H.7.2.", "H.9.a.")
-      row8 <- getrho(data461, "H.7.2.", "H.9.d.")
-      row9 <- getrho(data461, "H.7.2.", "H.10.")
+      row6 <- getrho(data461, "H.7.", "H.9.a.")
+      row7 <- getrho(h9arhoNODR, "H.7.", "H.9.a.")
+      row8 <- getrho(data461, "H.7.", "H.9.d.")
+      row9 <- getrho(data461, "H.7.", "H.10.")
       
       table461 <- data.frame(Vars = c("H8_H9a","H8_H9b","H8_H9c","H8_H9d","H8_H10",
                                       "H7_H9a","H7_H9aNODR","H7_H9d","H7_H10"),
@@ -618,7 +618,7 @@
       #for the box in table 4.6.3 labeled "Number of dated events in time30+time60",  
       #use the value of the number of observations in this data frame (dated3060).
       #For "% of dated events in time30+time60", divide 
-      #that count by the number of obs. in the df "all" (should be 4664)
+      #that count by the number of obs. in time 3060 (should be 4426)
       
       data463 <- dated3060 %>%  filter(!H.12. %in% c(1, 2) & !is.na(H.12.))
       data463_205 <- finaldata %>% filter(time %in% c(30, 60) & !H.2.a. %in% c("GEN"))
@@ -627,13 +627,13 @@
                                             H.2.b. %in% c("GEN"))
       data463ALL <- finaldata %>%  filter(time %in% c(30, 60))
       
-      fast <- data463 %>% filter(H.7.2. %in% c(2)) %>%
+      fast <- data463 %>% filter(H.7. %in% c(2)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
-      slow <- data463 %>% filter(H.7.2. %in% c(1)) %>%
+      slow <- data463 %>% filter(H.7. %in% c(1)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
       data463dr <- slow %>% filter(H.5.%in% c("Dr")) 
       data463nodr <- slow %>% filter(!H.5. %in% c("Dr"))
-      data463NAs <- data463 %>% filter(is.na(H.7.2.)) %>%
+      data463NAs <- data463 %>% filter(is.na(H.7.)) %>%
         mutate(Duration = as.numeric(H.2.b.) - as.numeric(H.2.a.))
       data463onlystart <- finaldata %>% filter(time %in% c(30, 60) & !H.2.a. %in% c("GEN")
                                                & H.2.b. %in% c("GEN"))
@@ -654,7 +654,7 @@
       na_stats <- sumstats(data463NAs)
       data463dr_stats <- sumstats(data463dr)
       data463nodr_stats <- sumstats(data463nodr)
-      data463onlystart_stats <- data.frame(Event_count = 6, Average = NA, Max = NA, Median = NA, Min = NA, SD = NA)
+      data463onlystart_stats <- data.frame(Event_count = NA, Average = NA, Max = NA, Median = NA, Min = NA, SD = NA)
       
       # Combine the summary statistics into a single data frame
       table463 <- bind_rows(
@@ -843,7 +843,7 @@
 # table S7. (Missing Data by Dimension)-----------------------------------------
       data.s7 <- finaldata %>% 
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
-      cols_of_interest <- c("H.7.2.", "H.8.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.", "H.10.")
+      cols_of_interest <- c("H.7.", "H.8.", "H.9.a.", "H.9.b.", "H.9.c.", "H.9.d.", "H.10.")
       coded_obs <- colSums(!is.na(data.s7[cols_of_interest])) #calculate number of non-na observations for each col
       na_obs <- colSums(is.na(data.s7[cols_of_interest])) #and number of na observations
       totals <- coded_obs + na_obs
@@ -1037,22 +1037,22 @@
       data.s10FAST <- finaldata %>%  filter(time %in% c(30, 60)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("Er"), "ER", H.5.)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", "PD"), "P&D", H.5.)) %>%
-        filter(H.7.2. %in% c(2))
+        filter(H.7. %in% c(2))
       data.s10SLOW <- finaldata %>%  filter(time %in% c(30, 60)) %>%
         mutate(H.5. = ifelse(H.5. %in% c("PE", "CP", "Lo", "PD"), "P&D", H.5.)) %>%
-        filter(H.7.2. %in% c(1))
+        filter(H.7. %in% c(1))
       
       table.s10FAST <- data.s10FAST %>%
         group_by(H.5.) %>%
         summarise(n = n(),
-                  Percent_total = (n / 3118) * 100) %>%  
+                  Percent_total = (n / 3073) * 100) %>%  
         arrange(desc(n)) %>%
         mutate(rank = row_number())
       
       table.s10SLOW <- data.s10SLOW %>%
         group_by(H.5.) %>%
         summarise(n = n(),
-                  Percent_total = (n / 849) * 100) %>%  
+                  Percent_total = (n / 894) * 100) %>%  
         arrange(desc(n)) %>%
         mutate(rank = row_number())
       
@@ -1084,13 +1084,13 @@
       }
       
       
-      table.s12 <- do.call(rbind, list(getrho(data.s12, "H.7.2.","H.8."), 
-                                       getrho(data.s12, "H.7.2.","H.9.a."),
-                                       getrho(data.s12NODR, "H.7.2.","H.9.a."),
-                                       getrho(data.s12, "H.7.2.","H.9.b."),
-                                       getrho(data.s12, "H.7.2.","H.9.c."),
-                                       getrho(data.s12, "H.7.2.","H.9.d."),
-                                       getrho(data.s12, "H.7.2.","H.10."),
+      table.s12 <- do.call(rbind, list(getrho(data.s12, "H.7.","H.8."), 
+                                       getrho(data.s12, "H.7.","H.9.a."),
+                                       getrho(data.s12NODR, "H.7.","H.9.a."),
+                                       getrho(data.s12, "H.7.","H.9.b."),
+                                       getrho(data.s12, "H.7.","H.9.c."),
+                                       getrho(data.s12, "H.7.","H.9.d."),
+                                       getrho(data.s12, "H.7.","H.10."),
                                        
                                        getrho(data.s12, "H.8.","H.9.a."),
                                        getrho(data.s12, "H.8.","H.9.b."),

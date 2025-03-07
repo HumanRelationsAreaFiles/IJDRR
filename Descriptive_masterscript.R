@@ -79,17 +79,18 @@
           geom_histogram(bins = nclass.Sturges(eventsmap_df$Number_of_hazards), 
                          fill = "lightblue", 
                          color = "black") +
+          scale_x_continuous(breaks = seq(min(eventsmap_df$Number_of_hazards), max(eventsmap_df$Number_of_hazards), by = 9)) +
           labs(title = "Sturges",
                x = "Number of Hazards",
                y = "Number of Societies") +
           theme_minimal()
         #SCOTT ((3.5*STDEV)/(n^(1/3)))
         scott_bins <- 3.5 * sd(eventsmap_df$Number_of_hazards, na.rm = TRUE) / length(eventsmap_df$Number_of_hazards)^(1/3)
-        # Create the histogram with ggplot2
         ggplot(eventsmap_df, aes(x = Number_of_hazards)) +
           geom_histogram(binwidth = scott_bins, 
                          fill = "lightblue", 
                          color = "black") +
+          scale_x_continuous(breaks = seq(min(eventsmap_df$Number_of_hazards), max(eventsmap_df$Number_of_hazards), by = scott_bins)) +
           labs(title = "Scott",
                x = "Number of Hazards",
                y = "Number of Societies") +
@@ -102,6 +103,7 @@
           geom_histogram(binwidth = fd_bins, 
                          fill = "lightblue", 
                          color = "black") +
+          scale_x_continuous(breaks = seq(min(eventsmap_df$Number_of_hazards), max(eventsmap_df$Number_of_hazards), by = fd_bins)) +
           labs(title = "Freedman-Diaconis",
                x = "Number of Hazards",
                y = "Number of Societies") +

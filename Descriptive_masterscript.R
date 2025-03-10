@@ -389,7 +389,9 @@
       #0/no events. The other three rows can use a subset of the 132 society sample.
       ghost_socstype <- data.frame(ID = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
                                    types_experienced = 0)
-      types_df <- rbind(row1_114, ghost_socstype)
+      #types_df <- rbind(row1_114, ghost_socstype)
+      #NOTE: decision made on 3.10.25 to not include ghost societies in this table; ignore above comment
+      types_df <- row1_114
       colnames(types_df) <- c("SCCS.ID", "Number_of_hztypes_experienced")
       type_freqs <- data.frame(
         Average = mean(types_df$Number_of_hztypes_experienced),
@@ -397,7 +399,7 @@
         Minimum = min(types_df$Number_of_hztypes_experienced),
         Median = median(types_df$Number_of_hztypes_experienced),
         Standard_dev = sd(types_df$Number_of_hztypes_experienced),
-        Society_count = c(128),
+        Society_count = c(nrow(types_df)),
         Event_count = c(nrow(types))
       )
       
@@ -411,7 +413,9 @@
       #0/no events. The other three rows can use a subset of the 132 society sample.
       ghost_socs <- data.frame(Var1 = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
                                Freq = 0)
-      all_df <- rbind(all_df114, ghost_socs)
+      #all_df <- rbind(all_df114, ghost_socs)
+      #NOTE: decision made on 3.10.25 to not include ghost societies in this table; ignore above comment
+      all_df <- all_df114
       colnames(all_df) <- c("SCCS.ID", "Number_of_events")
       freqs_all <- data.frame(
         Average = mean(all_df$Number_of_events),
@@ -419,7 +423,7 @@
         Minimum = min(all_df$Number_of_events),
         Median = median(all_df$Number_of_events),
         Standard_dev = sd(all_df$Number_of_events),
-        Society_count = c(128),
+        Society_count = c(nrow(all_df)),
         Event_count = c(sum(all_df$Number_of_events))
       )
       

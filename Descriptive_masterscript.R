@@ -58,20 +58,31 @@
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       events_per_soc <- events %>% distinct(OWC, EVENTID) %>%  count(OWC, name = "Number_of_hazards")
       eventscounter <- as.data.frame(events_per_soc) 
+      eventscounter <- eventscounter %>% mutate(Number_of_hazards = ifelse(OWC %in% c("AK05", "NM09"), NA, Number_of_hazards))
       #add the 14 societies not included in the filtered data set, with counts cases with 0 for "Number_of_events"; 4 cases are NA for frequency of events
       #note: this step is just for the first row, where we need to include all cases that are coded as 0/no events. 
-      ghost_socstype <- data.frame(OWC = c("MQ08","MP19","RI03","MA11","AK05","OI20","OZ04","NE09","NE06","NS18","NS29","SQ18","SP26","SM04"), 
-                                   Number_of_hazards = 0)
+      ghost_socstype <- data.frame(OWC = c("NE09","SP26","SQ18","MA11","NF06","OZ04","SM04"), 
+                                   Number_of_hazards = c(0,0,0,NA,NA,NA,NA))
       eventsmap_df <- rbind(eventscounter, ghost_socstype)
       colnames(eventsmap_df) <- c("OWC", "Number_of_hazards")
       
-      maptable <- data.frame(Number_hazard_events = c("0", "1-10", "11-20", "21-30", "31+"),
-                             Map_color = c("Yellow", "Lightgreen", "Green", "Blue", "Purple"),
+      #make a summary table describing the categories that will be displayed on the map
+      maptable <- data.frame(Number_hazard_events = c("0", "1-15", "16-30", "31-45", "46-60", "61-75", "76+"),
+                             Map_color = c("#440154",  # Purple  
+                                           "#3B528B",  # Blue  
+                                           "#21908D",  # Teal  
+                                           "#5DC963",  # Light Green  
+                                           "#FDE725",  # Yellow  
+                                           "#FF9800",  # Orange  
+                                           "#D41159"   # Reddish-pink
+                                           ),
                              Number_of_cases = c((eventsmap_df %>% filter(Number_of_hazards == 0) %>% nrow()),
-                                                 (eventsmap_df %>% filter(Number_of_hazards >= 1 & Number_of_hazards <= 10) %>% nrow()),
-                                                 (eventsmap_df %>% filter(Number_of_hazards >= 11 & Number_of_hazards <= 20) %>% nrow()),
-                                                 (eventsmap_df %>% filter(Number_of_hazards >= 21 & Number_of_hazards <= 30) %>% nrow()),
-                                                 (eventsmap_df %>% filter(Number_of_hazards >= 31) %>% nrow())))
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 1 & Number_of_hazards <= 15) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 16 & Number_of_hazards <= 30) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 31 & Number_of_hazards <= 45) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 46 & Number_of_hazards <= 60) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 61 & Number_of_hazards <= 75) %>% nrow()),
+                                                 (eventsmap_df %>% filter(Number_of_hazards >= 76) %>% nrow())))
       
       #make histograms to determine appropriate color bins for the map
         #STURGES (|log2n+1| where n = total obs.)
@@ -115,12 +126,14 @@
         ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>% 
             mutate(count = case_when(
             Number_of_hazards == 0 ~ 0,
-            Number_of_hazards >= 0 & Number_of_hazards <= 10 ~ 1, 
-            Number_of_hazards >= 11 & Number_of_hazards <= 20 ~ 2,
-            Number_of_hazards >= 21 & Number_of_hazards <= 30 ~ 3,
-            Number_of_hazards > 30 ~ 4
+            Number_of_hazards >= 1 & Number_of_hazards <= 15 ~ 1,
+            Number_of_hazards >= 16 & Number_of_hazards <= 30 ~ 2,
+            Number_of_hazards >= 31 & Number_of_hazards <= 45 ~ 3,
+            Number_of_hazards >= 46 & Number_of_hazards <= 60 ~ 4,
+            Number_of_hazards >= 61 & Number_of_hazards <= 75 ~ 5,
+            Number_of_hazards > 75 ~ 6
           )) %>%
-          filter(!is.na(Number_of_hazards)) #remove three duplicate rows
+          filter(!is.na(Number_of_hazards)) #remove NA rows
         
         #do this to create MAPS 
         world <- ne_countries(scale = "medium", returnclass = "sf")
@@ -143,9 +156,15 @@
             labels = c("0", "1-10", "11-20", "21-30",  "31+")
           )  +
           scale_color_manual(
-            values = c("#FDE725FF", "#90d743", "#35b779", "#31688e", "#440154"),
+            values = c("#440154",  # Purple  
+                       "#3B528B",  # Blue  
+                       "#21908D",  # Teal  
+                       "#5DC963",  # Light Green  
+                       "#FDE725",  # Yellow  
+                       "#FF9800",  # Orange  
+                       "#D41159"),   # Reddish-pink
             name = "Number of hazard events",
-            labels = c("0", "1-10", "11-20", "21-30",  "31+")
+            labels = c("0", "1-15", "16-30", "31-45",  "46-60", "61-75", "76+")
           ) +
           theme(
             legend.position = "bottom",

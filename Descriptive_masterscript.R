@@ -203,8 +203,8 @@
       eventscounter <- as.data.frame(events_per_id) 
       #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
       #note: this step is just for the first row, where we need to include all societies with 0/no events. The other three rows can use a subset of the 132 society sample.
-      ghost_socstype <- data.frame(ID = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
-                                   Number_of_hazards = 0)
+      ghost_socstype <- data.frame(ID = c(131,179,163,68,212,57,211,104,181), 
+                                   Number_of_hazards = c(0,0,0,NA,NA,NA,NA,NA,NA))
       events_df <- rbind(eventscounter, ghost_socstype)
       colnames(events_df) <- c("ID", "Number_of_hazards")
       
@@ -225,7 +225,7 @@
       
       
       
-      # Create the plot
+      # Create the plot----------------------------------------------------------------
       fig421 <- ggplot(data421, aes(x = Number_of_hazards, y = Number_of_societies)) +
         geom_bar(stat = "identity", fill = "yellowgreen") +
         
@@ -245,7 +245,26 @@
         theme(legend.position = c(0.95, 0.95),
               legend.justification = c(1, 1))
       fig421
+      #-------------------------------------------------------------------------
 
+      
+      # Create an alt. version of the plot, in a more traditional histogram format with breaks every 15 units
+      ggplot(data421, aes(x = Number_of_hazards)) +
+        geom_histogram(binwidth = 15, 
+                       fill = "yellowgreen", 
+                       color = "yellowgreen") +
+        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 49.9", linetype = "Mean - 49.9"), size = 1) +
+        geom_vline(aes(xintercept = median_hazard, color = "Median - 44", linetype = "Median - 44"), size = 1) +
+        scale_x_continuous(breaks = seq(min(0), max(165), by = 15)) +
+        scale_y_continuous(breaks = seq(min(0), max(10), by = 5)) +
+        scale_color_manual(name = NULL, values = c("Mean - 49.9" = "darkgreen", "Median - 44" = "purple")) +
+        scale_linetype_manual(name = NULL, values = c("Mean - 49.9" = "dashed", "Median - 44" = "solid")) +
+        labs(x = "Number of hazard events",
+             y = "Number of societies") +
+        theme_minimal(base_size = 15) +
+        theme(legend.position = c(0.95, 0.95),
+              legend.justification = c(1,1))
+      
 
 # Figure 4---------------------------------------------------------------------
       # write the necessary data to a data frame:
@@ -285,8 +304,10 @@
               legend.title = element_text(size = 18),
               legend.text = element_text(size = 16)
         )
-
-
+      
+      
+      
+      
 # Figure 5---------------------------------------------------------------------
       # write the following function:
       H7_H10_graphs = function(hz, var1, var1name) {

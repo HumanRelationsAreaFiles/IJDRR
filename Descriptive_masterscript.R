@@ -46,6 +46,7 @@
       library(dplyr)
       library(ggplot2)
       library(rnaturalearth)
+      library(viridis)
       
       # read in data directly from csv files:
       coords <- read.csv("merged_coords.csv") 
@@ -68,14 +69,7 @@
       
       #make a summary table describing the categories that will be displayed on the map
       maptable <- data.frame(Number_hazard_events = c("0", "1-15", "16-30", "31-45", "46-60", "61-75", "76+"),
-                             Map_color = c("#440154",  # Purple  
-                                           "#3B528B",  # Blue  
-                                           "#21908D",  # Teal  
-                                           "#5DC963",  # Light Green  
-                                           "#FDE725",  # Yellow  
-                                           "#FF9800",  # Orange  
-                                           "#D41159"   # Reddish-pink
-                                           ),
+                             Map_color = c("#fde725","#90d743","#35b779","#21918c","#31688e","#443983","#440154"),
                              Number_of_cases = c((eventsmap_df %>% filter(Number_of_hazards == 0) %>% nrow()),
                                                  (eventsmap_df %>% filter(Number_of_hazards >= 1 & Number_of_hazards <= 15) %>% nrow()),
                                                  (eventsmap_df %>% filter(Number_of_hazards >= 16 & Number_of_hazards <= 30) %>% nrow()),
@@ -121,62 +115,62 @@
           theme_minimal()
     
       #write a function to make the map
-      maps = function(eventsmap_df) {
-        
-        ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>% 
+        maps = function(eventsmap_df) {
+          
+          ovhz_coord <- full_join(coords, eventsmap_df, by = "OWC") %>% 
             mutate(count = case_when(
-            Number_of_hazards == 0 ~ 0,
-            Number_of_hazards >= 1 & Number_of_hazards <= 15 ~ 1,
-            Number_of_hazards >= 16 & Number_of_hazards <= 30 ~ 2,
-            Number_of_hazards >= 31 & Number_of_hazards <= 45 ~ 3,
-            Number_of_hazards >= 46 & Number_of_hazards <= 60 ~ 4,
-            Number_of_hazards >= 61 & Number_of_hazards <= 75 ~ 5,
-            Number_of_hazards > 75 ~ 6
-          )) %>%
-          filter(!is.na(Number_of_hazards)) #remove NA rows
-        
-        #do this to create MAPS 
-        world <- ne_countries(scale = "medium", returnclass = "sf")
-        class(world)
-        
-        #map of all hazards
-        samplemap <<- ggplot(data = world) +
-          geom_sf(color = "lightgrey", fill = "lightgrey") +
-          geom_point(data = ovhz_coord,
-                     aes(x = longitude,
-                         y = latitude,
-                         colour = as.factor(count)),
-                     size = 2,
-                     alpha = 1) +
-          theme(axis.title.x =  element_blank(),
-                axis.title.y =  element_blank()) +
-          scale_size_continuous(
-            range = c(2, 7),
-            name = "Number of hazard events",
-            labels = c("0", "1-10", "11-20", "21-30",  "31+")
-          )  +
-          scale_color_manual(
-            values = c("#440154",  # Purple  
-                       "#3B528B",  # Blue  
-                       "#21908D",  # Teal  
-                       "#5DC963",  # Light Green  
-                       "#FDE725",  # Yellow  
-                       "#FF9800",  # Orange  
-                       "#D41159"),   # Reddish-pink
-            name = "Number of hazard events",
-            labels = c("0", "1-15", "16-30", "31-45",  "46-60", "61-75", "76+")
-          ) +
-          theme(
-            legend.position = "bottom",
-            panel.background = element_rect(
-              fill = "white",
-              color = "white",
-              size = 0.5
-            ),
-            legend.title = element_text(size = 14),
-            legend.text = element_text(size = 12),
-            plot.title = element_text(size = 18))
-      }
+              Number_of_hazards == 0 ~ 0,
+              Number_of_hazards >= 1 & Number_of_hazards <= 15 ~ 1,
+              Number_of_hazards >= 16 & Number_of_hazards <= 30 ~ 2,
+              Number_of_hazards >= 31 & Number_of_hazards <= 45 ~ 3,
+              Number_of_hazards >= 46 & Number_of_hazards <= 60 ~ 4,
+              Number_of_hazards >= 61 & Number_of_hazards <= 75 ~ 5,
+              Number_of_hazards > 75 ~ 6,
+              is.na(Number_of_hazards) ~ NA_real_  
+            ))
+          
+          #load the world map
+          world <- ne_countries(scale = "medium", returnclass = "sf")
+          
+          #map of all hazards
+          samplemap <<- ggplot(data = world) +
+            geom_sf(color = "lightgrey", fill = "lightgrey") +
+            
+            #(first plot cases with usable data)
+            geom_point(data = ovhz_coord %>% filter(!is.na(count)),
+                       aes(x = longitude,
+                           y = latitude,
+                           colour = as.factor(count),
+                           shape = as.factor(count)),
+                       size = 2,
+                       alpha = 1) +
+            #then plot NA cases separately using a different symbol/color scheme (black open circles) 
+            geom_point(data = ovhz_coord %>% filter(is.na(count)),
+                       aes(x = longitude, y = latitude, shape = "NA", color = "NA"),
+                       size = 2) +
+            
+            theme(axis.title.x = element_blank(),
+                  axis.title.y = element_blank()) +
+            #scale colors/shapes manually to accommodate both the viridis scheme and the NA values 
+            scale_color_manual(
+              values = c(viridis::viridis(7, option = "D", direction = -1), "black"),
+              name = "Number of hazard events",
+              labels = c("0", "1-15", "16-30", "31-45", "46-60", "61-75", "76+", "NA")
+            ) +
+            scale_shape_manual(
+              values = c(16, 16, 16, 16, 16, 16, 16, 1),
+              name = "Number of hazard events",
+              labels = c("0", "1-15", "16-30", "31-45", "46-60", "61-75", "76+", "NA")
+            ) +
+            
+            theme(
+              legend.position = "bottom",
+              panel.background = element_rect(fill = "white", color = "white", size = 0.5),
+              legend.title = element_text(size = 14),
+              legend.text = element_text(size = 12),
+              plot.title = element_text(size = 18)
+            )
+        }
       maps(eventsmap_df)
       #finally, view the map object
       samplemap  

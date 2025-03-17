@@ -62,8 +62,8 @@
       eventscounter <- eventscounter %>% mutate(Number_of_hazards = ifelse(OWC %in% c("AK05", "NM09"), NA, Number_of_hazards))
       #add the 14 societies not included in the filtered data set, with counts cases with 0 for "Number_of_events"; 4 cases are NA for frequency of events
       #note: this step is just for the first row, where we need to include all cases that are coded as 0/no events. 
-      ghost_socstype <- data.frame(OWC = c("NE09","SP26","SQ18","MA11","NF06","OZ04","SM04"), 
-                                   Number_of_hazards = c(0,0,0,NA,NA,NA,NA))
+      ghost_socstype <- data.frame(OWC = c("NE09","SP26","SQ18","MA11","NF06","OZ04","SM04","MP19","NE06","NS18","OI20","SC07"), 
+                                   Number_of_hazards = c(0,0,0,NA,NA,NA,NA,0,0,0,0,0))
       eventsmap_df <- rbind(eventscounter, ghost_socstype)
       colnames(eventsmap_df) <- c("OWC", "Number_of_hazards")
       
@@ -197,8 +197,8 @@
       eventscounter <- as.data.frame(events_per_id) 
       #add the 18 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
       #note: this step is just for the first row, where we need to include all societies with 0/no events. The other three rows can use a subset of the 132 society sample.
-      ghost_socstype <- data.frame(ID = c(131,179,163,68,212,57,211,104,181), 
-                                   Number_of_hazards = c(0,0,0,NA,NA,NA,NA,NA,NA))
+      ghost_socstype <- data.frame(ID = c(131,179,163,32,132,135,90,219,68,212,57,211,104,181), 
+                                   Number_of_hazards = c(0,0,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA))
       events_df <- rbind(eventscounter, ghost_socstype)
       colnames(events_df) <- c("ID", "Number_of_hazards")
       
@@ -217,27 +217,51 @@
       mean_label <- paste("Mean -", round(mean_hazard, 1))
       median_label <- paste("Median -", median_hazard)
       
+      # Define bin breaks and labels-------------------------------------------------
+      breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
+      labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
+      
+      
+      # Create a new binned variable-----------------------------------------------
+      data421$Hazard_Bins <- cut(data421$Number_of_hazards, breaks = breaks, labels = labels, include.lowest = TRUE)
+      
+      # Do not plot NA values---------------------------------------------------------------
+      data421 <- na.omit(data421)
+      
+      
+      # Convert mean and median hazard values to their respective bin positions-------------
+      mean_bin <- cut(mean_hazard, breaks = breaks, labels = seq_along(labels))
+      median_bin <- cut(median_hazard, breaks = breaks, labels = seq_along(labels))
       
       
       # Create the plot----------------------------------------------------------------
-      fig421 <- ggplot(data421, aes(x = Number_of_hazards, y = Number_of_societies)) +
+      fig421 <- ggplot(data421, aes(x = Hazard_Bins, y = Number_of_societies)) +
         geom_bar(stat = "identity", fill = "yellowgreen") +
         
-        # Add vertical lines for mean and median, and map them to aesthetics for the legend
-        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 49.9", linetype = "Mean - 49.9"), size = 1) +
-        geom_vline(aes(xintercept = median_hazard, color = "Median - 44", linetype = "Median - 44"), size = 1) +
+        #manually draw the grid to match the bins (every 15 units)
+        geom_vline(xintercept = seq(0.5, length(labels) + 0.5, by = 1), color = "gray80", linetype = "dotted") +
         
-        # Define colors and line types for the legend
-        scale_color_manual(name = NULL, values = c("Mean - 49.9" = "darkgreen", "Median - 44" = "purple")) +
-        scale_linetype_manual(name = NULL, values = c("Mean - 49.9" = "dashed", "Median - 44" = "solid")) +
+        #add in median and mean lines
+        geom_vline(aes(xintercept = as.numeric(mean_bin), color = "Mean - 50", linetype = "Mean - 50"), size = 1) +
+        geom_vline(aes(xintercept = as.numeric(median_bin), color = "Median - 44", linetype = "Median - 44"), size = 1) +
         
-        # Set axis labels
+        #define colors and line types for the legend
+        scale_color_manual(name = "", values = c("Mean - 50" = "darkgreen", "Median - 44" = "purple")) +
+        scale_linetype_manual(name = "", values = c("Mean - 50" = "dashed", "Median - 44" = "solid")) +
+        
+        #ensure x axis lines and labels match
+        scale_x_discrete(labels = labels) +
+        
+        #set axis labels
         labs(x = "Number of hazard events", y = "Number of societies") +
         
-        # Customize the theme
+        #customize theme
         theme_minimal(base_size = 15) + 
         theme(legend.position = c(0.95, 0.95),
-              legend.justification = c(1, 1))
+              legend.justification = c(1, 1),
+              axis.text.x = element_text(angle = 0, hjust = 0.5),  # Fully horizontal labels
+              panel.grid.major.x = element_blank())  # Remove default x-grid lines
+
       fig421
       #-------------------------------------------------------------------------
 

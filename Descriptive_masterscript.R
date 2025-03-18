@@ -330,6 +330,44 @@
       
       tab431 <- as.data.frame(tab431)
       
+      # make an alt version of the figure
+      hz_431alt <- hz %>% filter(time %in% c(30,60)) %>%
+        filter(!is.na(H.8.)) %>%
+        mutate(H.5. = ifelse(H.5. == "PD" | H.5. =="PE"|H.5.=="CP"|H.5.=="Lo", "P&D", H.5.)) %>%
+        mutate(H.5. = ifelse(H.5. != "Fl" & H.5. != "Dr" & H.5. != "P&D", "OTHER", H.5.)) %>%
+        mutate(H.5. = case_when(
+          H.5. == "Dr" ~ "Drought",
+          H.5. == "Fl" ~ "Flood",
+          H.5. == "P&D" ~ "Pests and disease (P&D)",
+          H.5. == "OTHER" ~ "Other",
+          TRUE ~ as.character(H.5.)
+        ))
+      
+      hz_431alt$H.5. <- factor(hz_431alt$H.5., levels = c("Drought", "Flood", "Pests and disease (P&D)", "Other"))
+      
+      ggplot(data = hz_431alt, aes(x = as.factor(H.5.), fill = factor(H.8.))) +
+        geom_bar(position = "fill") +
+        scale_fill_manual(
+          values = c("#fde725", "#21918c", "#440154"),
+          name = "Predictability",
+          labels = c("Unpredictable (1)", "Moderately predictable (2)", "Very predictable (3)")
+        ) + labs(x = "Hazard type", y = "Percent of events")  +
+        
+        theme(legend.position = "bottom",
+              panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                              colour = "lightgrey"),
+              panel.grid.minor = element_line(size = 0.5, linetype = 'solid',
+                                              colour = "lightgrey"),
+              panel.background = element_rect(fill = "white", color = "lightgrey", size = 0.5),
+              axis.text.y = element_text(size = 16),
+              axis.text.x = element_text(size = 16),
+              axis.title.x = element_text(size = 18),
+              axis.title.y = element_text(size = 18),
+              legend.title = element_text(size = 18),
+              legend.text = element_text(size = 16)
+        )
+      
+      
       
 # Figure 5---------------------------------------------------------------------
       # write the following function:
@@ -370,10 +408,56 @@
         mutate(H.7. = ifelse(H.7. == 1, "Slow (1)", H.7.)) %>%  mutate(H.7. = ifelse(H.7. == 2, "Fast (2)", H.7.))
       hz_441$H.7. <- factor(hz_441$H.7., levels = c("Slow (1)", "Fast (2)"))
       
+      # and make accompanying summary table
+      tab441 <- hz_441 %>%
+        group_by(H.5., H.7.) %>%
+        summarise(count = n(), .groups = 'drop')
+      
+      tab441 <- as.data.frame(tab441)
+      
+      
       # make the figure
       H7_H10_graphs(hz_441, H.7., "Onset")
       # and display it
       var1_bargraph
+      
+      
+      # and make an alternate version
+      hz_441alt <- hz %>% filter(time %in% c(30,60)) %>%
+        filter(!is.na(H.7.)) %>%
+        mutate(H.5. = ifelse(H.5. == "PD" | H.5. =="PE"|H.5.=="CP"|H.5.=="Lo", "P&D", H.5.)) %>%
+        mutate(H.5. = ifelse(H.5. != "Fl" & H.5. != "Dr" & H.5. != "P&D", "OTHER", H.5.)) %>%
+        mutate(H.5. = case_when(
+          H.5. == "Dr" ~ "Drought",
+          H.5. == "Fl" ~ "Flood",
+          H.5. == "P&D" ~ "Pests and disease (P&D)",
+          H.5. == "OTHER" ~ "Other",
+          TRUE ~ as.character(H.5.)
+        ))
+      
+      hz_441alt$H.5. <- factor(hz_441alt$H.5., levels = c("Drought", "Flood", "Pests and disease (P&D)", "Other"))
+      
+      ggplot(data = hz_441alt, aes(x = as.factor(H.5.), fill = factor(H.7.))) +
+        geom_bar(position = "fill") +
+        scale_fill_manual(
+          values = c("#fde725", "#440154"),
+          name = "Onset",
+          labels = c("Slow (1)", "Fast (2)")
+        ) + labs(x = "Hazard type", y = "Percent of events")  +
+        
+        theme(legend.position = "bottom",
+              panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                              colour = "lightgrey"),
+              panel.grid.minor = element_line(size = 0.5, linetype = 'solid',
+                                              colour = "lightgrey"),
+              panel.background = element_rect(fill = "white", color = "lightgrey", size = 0.5),
+              axis.text.y = element_text(size = 16),
+              axis.text.x = element_text(size = 16),
+              axis.title.x = element_text(size = 18),
+              axis.title.y = element_text(size = 18),
+              legend.title = element_text(size = 18),
+              legend.text = element_text(size = 16)
+        )
 
 
 # end of figures section-------------------------------------------------------
@@ -570,7 +654,7 @@
           colnames(value_counts) <- c("Value", "Count") #generate counts for each unique value
           total <- nrow(data) #old version: sum(value_counts$Count, na.rm = TRUE)
           total_sev <- sum(value_counts$Count[as.numeric(as.character(value_counts$Value)) >= 3], na.rm = TRUE)
-          percent_sev <- (total_sev / total) * 100
+          percent_sev <- (total_sev / (total - total_NAs)) * 100
           #combine the results for the given variable
           result <- data.frame(t(value_counts$Count), total_NAs, total, total_sev, percent_sev)
           rownames(result) <- var

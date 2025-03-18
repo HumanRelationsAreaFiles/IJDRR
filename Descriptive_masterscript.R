@@ -323,7 +323,12 @@
               legend.text = element_text(size = 16)
         )
       
+      # make accompanying summary table
+      tab431 <- hz_431 %>%
+        group_by(H.5., H.8.) %>%
+        summarise(count = n(), .groups = 'drop')
       
+      tab431 <- as.data.frame(tab431)
       
       
 # Figure 5---------------------------------------------------------------------

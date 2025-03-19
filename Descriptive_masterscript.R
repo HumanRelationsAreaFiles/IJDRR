@@ -211,8 +211,8 @@
       
       
       # Calculate mean and median of the x-axis (number of hazard events)
-      mean_hazard <- mean(data421$Number_of_hazards, na.rm = TRUE)
-      median_hazard <- median(data421$Number_of_hazards, na.rm = TRUE)
+      mean_hazard <- weighted.mean(data421$Number_of_hazards, w = data421$Number_of_societies, na.rm = TRUE)
+      median_hazard <- median(rep(data421$Number_of_hazards, times = data421$Number_of_societies), na.rm = TRUE)
       # Turn them into dynamic labels
       mean_label <- paste("Mean -", round(mean_hazard, 1))
       median_label <- paste("Median -", median_hazard)
@@ -221,13 +221,11 @@
       breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
       labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
       
-      
       # Create a new binned variable-----------------------------------------------
       data421$Hazard_Bins <- cut(data421$Number_of_hazards, breaks = breaks, labels = labels, include.lowest = TRUE)
       
       # Do not plot NA values---------------------------------------------------------------
       data421 <- na.omit(data421)
-      
       
       # Convert mean and median hazard values to their respective bin positions-------------
       mean_bin <- cut(mean_hazard, breaks = breaks, labels = seq_along(labels))
@@ -242,12 +240,16 @@
         geom_vline(xintercept = seq(0.5, length(labels) + 0.5, by = 1), color = "gray80", linetype = "dotted") +
         
         #add in median and mean lines
-        geom_vline(aes(xintercept = as.numeric(mean_bin), color = "Mean - 50", linetype = "Mean - 50"), size = 1) +
-        geom_vline(aes(xintercept = as.numeric(median_bin), color = "Median - 44", linetype = "Median - 44"), size = 1) +
+        geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), size = 1) +
+        geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), size = 1) +
         
-        #define colors and line types for the legend
-        scale_color_manual(name = "", values = c("Mean - 50" = "darkgreen", "Median - 44" = "purple")) +
-        scale_linetype_manual(name = "", values = c("Mean - 50" = "dashed", "Median - 44" = "solid")) +
+        #define colors and line types for the legend (mapping)
+        scale_color_manual(name = "", 
+                           values = c("Mean - 35" = "darkgreen", "Median - 40" = "purple"),
+                           breaks = c("Mean - 35", "Median - 40")) +
+        scale_linetype_manual(name = "", 
+                              values = c("Mean - 35" = "dashed", "Median - 40" = "solid"),
+                              breaks = c("Mean - 35", "Median - 40")) +
         
         #ensure x axis lines and labels match
         scale_x_discrete(labels = labels) +
@@ -271,19 +273,24 @@
         geom_histogram(binwidth = 15, 
                        fill = "yellowgreen", 
                        color = "yellowgreen") +
-        geom_vline(aes(xintercept = mean_hazard, color = "Mean - 49.9", linetype = "Mean - 49.9"), size = 1) +
-        geom_vline(aes(xintercept = median_hazard, color = "Median - 44", linetype = "Median - 44"), size = 1) +
+        
+        # Manually draw the grid to match the bins (every 15 units)
+        geom_vline(xintercept = breaks, color = "gray80", linetype = "dotted") +
+        geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), size = 1) +
+        geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), size = 1) +
         scale_x_continuous(breaks = seq(min(0), max(165), by = 15)) +
         scale_y_continuous(breaks = seq(min(0), max(10), by = 5)) +
-        scale_color_manual(name = NULL, values = c("Mean - 49.9" = "darkgreen", "Median - 44" = "purple")) +
-        scale_linetype_manual(name = NULL, values = c("Mean - 49.9" = "dashed", "Median - 44" = "solid")) +
+        scale_color_manual(name = NULL, values = c("Mean - 35" = "darkgreen", "Median - 40" = "purple")) +
+        scale_linetype_manual(name = NULL, values = c("Mean - 35" = "dashed", "Median - 40" = "solid")) +
         labs(x = "Number of hazard events",
              y = "Number of societies") +
         theme_minimal(base_size = 15) +
         theme(legend.position = c(0.95, 0.95),
               legend.justification = c(1,1))
       
-
+      
+      
+      
 # Figure 4---------------------------------------------------------------------
       # write the necessary data to a data frame:
       hz_431 <- hz %>% filter(time %in% c(30,60)) %>%
@@ -531,14 +538,13 @@
         filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.))
       types_per_id <- types %>% distinct(ID, H.5.) %>%  count(ID, name = "types_experienced")
       row1_114 <- as.data.frame(types_per_id) #put those counts into a df and run summary stats
-      #add the 14 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all societies even though some have
-      #0/no events. The other three rows can use a subset of the 132 society sample.
-      ghost_socstype <- data.frame(ID = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
+      #add the 8 societies that are (a) not included in the filtered data set and (b) have 0 
+      #events, rather than being NA due to low DQ, or simply do not have events in time 30/60.      
+      #note: this step is just for the first 2 rows. The other rows can use a subset of the 132 society sample.
+      ghost_socstype <- data.frame(ID = c(32,90,131,132,135,163,179,219), 
                                    types_experienced = 0)
-      #types_df <- rbind(row1_114, ghost_socstype)
-      #NOTE: decision made on 3.10.25 to not include ghost societies in this table; ignore above comment
-      types_df <- row1_114
+      types_df <- rbind(row1_114, ghost_socstype)
+      #types_df <- row1_114
       colnames(types_df) <- c("SCCS.ID", "Number_of_hztypes_experienced")
       type_freqs <- data.frame(
         Average = mean(types_df$Number_of_hztypes_experienced),
@@ -556,13 +562,14 @@
       counts_per_id <- table(all$ID) #get a count of hazards per society
       all_df114 <- as.data.frame(counts_per_id) #put those counts into a df and run summary stats
       #add the 14 societies not included in the filtered data set, with counts of 0 for "Number_of_events"
-      #note: this step is just for the first row, where we need to include all societies even though some have
-      #0/no events. The other three rows can use a subset of the 132 society sample.
-      ghost_socs <- data.frame(Var1 = c(29,32,55,57,68,90,104,131,132,135,136,163,179,181), 
-                               Freq = 0)
-      #all_df <- rbind(all_df114, ghost_socs)
-      #NOTE: decision made on 3.10.25 to not include ghost societies in this table; ignore above comment
-      all_df <- all_df114
+      #note: this step is just for the first 2 rows, where we need to include all societies even though some have
+      #0/no events. The other rows can use a subset of the 132 society sample.
+      ghost_socs <- data.frame(Var1 = c(32,90,131,132,135,163,179,219), 
+                               Freq = c(0,0,0,0,0,0,0,0))
+      all_df114[] <- lapply(all_df114, function(x) if (is.factor(x)) as.character(x) else x)
+      ghost_socs[] <- lapply(ghost_socs, function(x) if (is.factor(x)) as.character(x) else x)
+      all_df <- rbind(all_df114, ghost_socs)
+      #all_df <- all_df114
       colnames(all_df) <- c("SCCS.ID", "Number_of_events")
       freqs_all <- data.frame(
         Average = mean(all_df$Number_of_events),

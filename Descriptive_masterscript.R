@@ -304,7 +304,7 @@
           TRUE ~ as.character(H.8.)
         ))
       
-      hz_431$H.8. <- factor(hz_431$H.8., levels = c("Unpredictable (1)", "Moderately predictable (2)", "Very predictable (3)"))
+      hz_431$H.8. <- factor(hz_431$H.8., levels = c("Very predictable (3)", "Moderately predictable (2)", "Unpredictable (1)"))
       
       
       # plot the actual graph: 
@@ -350,15 +350,16 @@
           TRUE ~ as.character(H.5.)
         ))
       
-      hz_431alt$H.5. <- factor(hz_431alt$H.5., levels = c("Drought", "Flood", "Pests and disease (P&D)", "Other"))
+      hz_431alt$H.5. <- factor(hz_431alt$H.5., levels = c("Flood", "Drought", "Pests and disease (P&D)", "Other"))
       
-      ggplot(data = hz_431alt, aes(x = as.factor(H.5.), fill = factor(H.8.))) +
+      ggplot(data = hz_431alt, aes(x = as.factor(H.5.), fill = factor(H.8., levels = c(3,2,1)))) +
         geom_bar(position = "fill") +
         scale_fill_manual(
           values = c("#fde725", "#21918c", "#440154"),
           name = "Predictability",
-          labels = c("Unpredictable (1)", "Moderately predictable (2)", "Very predictable (3)")
+          labels = c("Very predictable (3)", "Moderately predictable (2)", "Unpredictable (1)")
         ) + labs(x = "Hazard type", y = "Percent of events")  +
+        guides(fill = guide_legend(reverse = TRUE)) +
         
         theme(legend.position = "bottom",
               panel.grid.major = element_line(size = 0.5, linetype = 'solid',
@@ -1156,6 +1157,8 @@
       #this was formerly table S9b.
       s9bfl <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Fl"))
       s9bdr <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Dr"))
+      s9bnodr <- finaldata %>% filter(time %in% c(30,60) & !H.5. %in% c("Dr")) %>% mutate(H.5. = ifelse(!H.5. %in% c("Dr"), "OTHER", H.5.))
+        
       
       #part 1: calculate the mean ranks
       ranks_Dr <- rank(c(s9bdr$H.8.))
@@ -1167,8 +1170,21 @@
       mean_ranks_Fl <- mean(ranks_Fl)
       
       table.s9b1 <- data.frame(Hz_type = c("Dr", "Fl", "Total"), Num_events =
-                                 c(536,842,1378), Mean_rank = c(mean_ranks_Dr,mean_ranks_Fl,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_Fl,NA))
+                                 c(nrow(s9bdr),nrow(s9bfl),sum(nrow(s9bdr),nrow(s9bfl))), 
+                               Mean_rank = c(mean_ranks_Dr,mean_ranks_Fl,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_Fl,NA))
       writexl::write_xlsx(table.s9b1, "S9b-1")
+      
+      #part 1 bonus: recalculate comparing Dr to all other hazards
+      ranks_Dr <- rank(c(s9bdr$H.8.))
+      sum_ranks_Dr <- sum(ranks_Dr)
+      mean_ranks_Dr <- mean(ranks_Dr)
+      ranks_OTH <- rank(c(s9bnodr$H.8.))
+      sum_ranks_OTH <- sum(ranks_OTH)
+      mean_ranks_OTH <- mean(ranks_OTH)
+      table.s9b1_dr <- data.frame(Hz_type = c("Dr", "OTHER", "Total"), Num_events =
+                                 c(nrow(s9bdr),nrow(s9bnodr),sum(nrow(s9bdr),nrow(s9bnodr))), 
+                                 Mean_rank = c(mean_ranks_Dr,mean_ranks_OTH,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_OTH,NA))
+      
       
       #part 2: calculate the actual U and W scores
       combined_data <- c(s9bdr$H.8., s9bfl$H.8.)
@@ -1191,6 +1207,22 @@
                                                                     Z, W_score$p.value))
       writexl::write_xlsx(table.s9b2, "S9b-2")
       
+      #part 2 bonus: recalculate comparing Dr to all other hazards
+      combdata_v2 <- c(s9bdr$H.8., s9bnodr$H.8.)
+      group_ind_v2 <- c(rep("Dr", length(s9bdr$H.8.)), rep("OTHER", length(s9bnodr$H.8.)))
+      combdata_v2 <- data.frame(H8 = combdata_v2, type = group_ind_v2)
+      W_score_v2 <- wilcox.test(H8 ~ type, data = combdata_v2, exact = FALSE)
+      n1_v2 <- sum(combdata_v2$type == "Dr")
+      n2_v2 <- sum(combdata_v2$type == "OTHER")
+      U_2 <- W_score_v2$statistic - (n1_v2 * (n1_v2 + 1)) / 2
+      mu_U_2 <- (n1_v2 * n2_v2) / 2 
+      sigma_U_2 <- sqrt((n1_v2 * n2_v2 * (n1_v2 + n2_v2 + 1)) / 12)
+      Z_2 <- (U_2 - mu_U_2) / sigma_U_2
+      table.s9b2_dr <- data.frame(Stat = c("U","W","Z","p"), Value = c(U_2, W_score_v2$statistic,
+                                                                    Z_2, W_score_v2$p.value))
+      
+      
+      
       #part 3: finally, calculate general summary stats for H8
       dr <- c(s9bdr$H.8.)
       fl <- c(s9bfl$H.8.)
@@ -1201,6 +1233,17 @@
                                Max = c(max(dr, na.rm = TRUE), max(fl, na.rm = TRUE)), 
                                SD = c(sd(dr, na.rm = TRUE), sd(fl, na.rm = TRUE)))
       writexl::write_xlsx(table.s9b3,"S9b-3")
+      
+      #part 3 bonus: recalculate comparing Dr to all other hazards
+      oth <- c(s9bnodr$H.8.)
+      table.s9b3_dr <- data.frame(Hz_type = c("Droughts", "Other"), Num_events = c(nrow(s9bdr),nrow(s9bnodr)),
+                               Mean = c(mean(dr, na.rm = TRUE), mean(oth, na.rm = TRUE)), 
+                               Min = c(min(dr, na.rm = TRUE), min(oth, na.rm = TRUE)), 
+                               Median = c(median(dr, na.rm = TRUE), median(oth, na.rm = TRUE)), 
+                               Max = c(max(dr, na.rm = TRUE), max(oth, na.rm = TRUE)), 
+                               SD = c(sd(dr, na.rm = TRUE), sd(oth, na.rm = TRUE)))
+      
+      
       
       #the 3 components of table S9b are now saved to data frames called table.s9b1,
       #table.s9b2 and table.s9b3

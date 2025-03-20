@@ -947,8 +947,24 @@
       # Combine results into a single data frame
       PDspecifics <- do.call(rbind, result_list)
       
+
+      
       #Write the final df
       table.s4 <- bind_rows(table.s4, PDspecifics)
+      
+      # Bonus! Calculate combined totals for the top 3 rows
+      s4top3 <- finaldata %>%
+        filter(time %in% c(30, 60) & !H.12. %in% c(1, 2) & !is.na(H.12.)) %>%
+        mutate(H.5. = case_when(H.5. %in% c("Dr", "Fl", "PD", "Lo", "CP", "PE") ~ "TOP", TRUE ~ H.5.)) %>%
+        filter(H.5. == "TOP")
+      top3 <- data.frame(H.5. = c("Top3_types"), Total_events = 
+                           sum(table.s4$Total_events[table.s4$rank %in% c(1, 2, 3)], na.rm = TRUE), 
+                         Percent_total_ev = sum(table.s4$Percent_total_ev[table.s4$rank %in% c(1, 2, 3)], na.rm = TRUE), 
+                         Societies = n_distinct(s4top3$ID), 
+                         Percent_total_soc = (100 * (n_distinct(s4top3$ID) / 132)),
+                         rank = c(NA))
+      #And add to the final data frame
+      table.s4 <- bind_rows(table.s4, top3)
       
       writexl::write_xlsx(table.s4, "S4")
       

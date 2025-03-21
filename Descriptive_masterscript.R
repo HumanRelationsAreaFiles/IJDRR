@@ -217,65 +217,63 @@
       mean_label <- paste("Mean -", round(mean_hazard, 1))
       median_label <- paste("Median -", median_hazard)
       
-      # Define bin breaks and labels-------------------------------------------------
-      breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
-      labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
-      
-      # Create a new binned variable-----------------------------------------------
-      data421$Hazard_Bins <- cut(data421$Number_of_hazards, breaks = breaks, labels = labels, include.lowest = TRUE)
-      
-      # Do not plot NA values---------------------------------------------------------------
-      data421 <- na.omit(data421)
-      
-      # Convert mean and median hazard values to their respective bin positions-------------
-      mean_bin <- cut(mean_hazard, breaks = breaks, labels = seq_along(labels))
-      median_bin <- cut(median_hazard, breaks = breaks, labels = seq_along(labels))
-      
-      
-      # Create the plot----------------------------------------------------------------
-      fig421 <- ggplot(data421, aes(x = Hazard_Bins, y = Number_of_societies)) +
-        geom_bar(stat = "identity", fill = "yellowgreen") +
-        
-        #manually draw the grid to match the bins (every 15 units)
-        geom_vline(xintercept = seq(0.5, length(labels) + 0.5, by = 1), color = "gray80", linetype = "dotted") +
-        
-        #add in median and mean lines
-        geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), size = 1) +
-        geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), size = 1) +
-        
-        #define colors and line types for the legend (mapping)
-        scale_color_manual(name = "", 
-                           values = c("Mean - 35" = "darkgreen", "Median - 40" = "purple"),
-                           breaks = c("Mean - 35", "Median - 40")) +
-        scale_linetype_manual(name = "", 
-                              values = c("Mean - 35" = "dashed", "Median - 40" = "solid"),
-                              breaks = c("Mean - 35", "Median - 40")) +
-        
-        #ensure x axis lines and labels match
-        scale_x_discrete(labels = labels) +
-        
-        #set axis labels
-        labs(x = "Number of hazard events", y = "Number of societies") +
-        
-        #customize theme
-        theme_minimal(base_size = 15) + 
-        theme(legend.position = c(0.95, 0.95),
-              legend.justification = c(1, 1),
-              axis.text.x = element_text(angle = 0, hjust = 0.5),  # Fully horizontal labels
-              panel.grid.major.x = element_blank())  # Remove default x-grid lines
-
-      fig421
+      # # Define bin breaks and labels-------------------------------------------------
+      # breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
+      # labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
+      # 
+      # # Create a new binned variable-----------------------------------------------
+      # data421$Hazard_Bins <- cut(data421$Number_of_hazards, breaks = breaks, labels = labels, include.lowest = TRUE)
+      # 
+      # # Do not plot NA values---------------------------------------------------------------
+      # data421 <- na.omit(data421)
+      # 
+      # # Convert mean and median hazard values to their respective bin positions-------------
+      # mean_bin <- cut(mean_hazard, breaks = breaks, labels = seq_along(labels))
+      # median_bin <- cut(median_hazard, breaks = breaks, labels = seq_along(labels))
+      # 
+      # 
+      # # Create the plot----------------------------------------------------------------
+      # fig421 <- ggplot(data421, aes(x = Hazard_Bins, y = Number_of_societies)) +
+      #   geom_bar(stat = "identity", fill = "yellowgreen") +
+      #   
+      #   #manually draw the grid to match the bins (every 15 units)
+      #   geom_vline(xintercept = seq(0.5, length(labels) + 0.5, by = 1), color = "gray80", linetype = "dotted") +
+      #   
+      #   #add in median and mean lines
+      #   geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), linewidth = 1) +
+      #   geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), linewidth = 1) +
+      #   
+      #   #define colors and line types for the legend (mapping)
+      #   scale_color_manual(name = "", 
+      #                      values = c("Mean - 35" = "darkgreen", "Median - 40" = "purple"),
+      #                      breaks = c("Mean - 35", "Median - 40")) +
+      #   scale_linetype_manual(name = "", 
+      #                         values = c("Mean - 35" = "dashed", "Median - 40" = "solid"),
+      #                         breaks = c("Mean - 35", "Median - 40")) +
+      #   
+      #   #ensure x axis lines and labels match
+      #   scale_x_discrete(labels = labels) +
+      #   
+      #   #set axis labels
+      #   labs(x = "Number of hazard events", y = "Number of societies") +
+      #   
+      #   #customize theme
+      #   theme_minimal(base_size = 15) + 
+      #   theme(legend.position.inside = c(0.95, 0.95),
+      #         legend.justification = c(1, 1),
+      #         axis.text.x = element_text(angle = 0, hjust = 0.5),  # Fully horizontal labels
+      #         panel.grid.major.x = element_blank())  # Remove default x-grid lines
+      # 
+      # fig421
       #-------------------------------------------------------------------------
 
       
       # Create an alt. version of the plot, in a more traditional histogram format with breaks every 15 units
       ggplot(data421, aes(x = Number_of_hazards)) +
-        geom_histogram(binwidth = 15, 
-                       fill = "yellowgreen", 
-                       color = "yellowgreen") +
+        geom_histogram(binwidth = 15, center = 7.5, fill = "yellowgreen", color = "#35b779") +
         
         # Manually draw the grid to match the bins (every 15 units)
-        geom_vline(xintercept = breaks, color = "gray80", linetype = "dotted") +
+        geom_vline(xintercept = breaks, color = "gray80", linetype = "dotted", size = 0.7) +
         geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), size = 1) +
         geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), size = 1) +
         scale_x_continuous(breaks = seq(min(0), max(165), by = 15)) +
@@ -286,7 +284,8 @@
              y = "Number of societies") +
         theme_minimal(base_size = 15) +
         theme(legend.position = c(0.95, 0.95),
-              legend.justification = c(1,1))
+              legend.justification = c(1,1),
+              panel.grid.minor = element_blank())
       
       
       

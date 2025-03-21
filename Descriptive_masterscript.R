@@ -209,7 +209,6 @@
         ungroup()
       
       
-      
       # Calculate mean and median of the x-axis (number of hazard events)
       mean_hazard <- weighted.mean(data421$Number_of_hazards, w = data421$Number_of_societies, na.rm = TRUE)
       median_hazard <- median(rep(data421$Number_of_hazards, times = data421$Number_of_societies), na.rm = TRUE)
@@ -220,10 +219,7 @@
       # Define bin breaks and labels (we decided to bin by 15)-------------------------------------------------
       breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
       labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
-      # 
-      # # Create a new binned variable-----------------------------------------------
-      # data421$Hazard_Bins <- cut(data421$Number_of_hazards, breaks = breaks, labels = labels, include.lowest = TRUE)
-      # 
+
       # Do not plot NA values---------------------------------------------------------------
       data421 <- na.omit(data421)
       
@@ -247,45 +243,6 @@
               panel.grid.minor = element_blank())
       figure3
       
-      # 
-      # # Convert mean and median hazard values to their respective bin positions-------------
-      # mean_bin <- cut(mean_hazard, breaks = breaks, labels = seq_along(labels))
-      # median_bin <- cut(median_hazard, breaks = breaks, labels = seq_along(labels))
-      # 
-      # 
-      # # Create the plot----------------------------------------------------------------
-      # fig421 <- ggplot(data421, aes(x = Hazard_Bins, y = Number_of_societies)) +
-      #   geom_bar(stat = "identity", fill = "yellowgreen") +
-      #   
-      #   #manually draw the grid to match the bins (every 15 units)
-      #   geom_vline(xintercept = seq(0.5, length(labels) + 0.5, by = 1), color = "gray80", linetype = "dotted") +
-      #   
-      #   #add in median and mean lines
-      #   geom_vline(aes(xintercept = 35, color = "Mean - 35", linetype = "Mean - 35"), linewidth = 1) +
-      #   geom_vline(aes(xintercept = 40, color = "Median - 40", linetype = "Median - 40"), linewidth = 1) +
-      #   
-      #   #define colors and line types for the legend (mapping)
-      #   scale_color_manual(name = "", 
-      #                      values = c("Mean - 35" = "darkgreen", "Median - 40" = "purple"),
-      #                      breaks = c("Mean - 35", "Median - 40")) +
-      #   scale_linetype_manual(name = "", 
-      #                         values = c("Mean - 35" = "dashed", "Median - 40" = "solid"),
-      #                         breaks = c("Mean - 35", "Median - 40")) +
-      #   
-      #   #ensure x axis lines and labels match
-      #   scale_x_discrete(labels = labels) +
-      #   
-      #   #set axis labels
-      #   labs(x = "Number of hazard events", y = "Number of societies") +
-      #   
-      #   #customize theme
-      #   theme_minimal(base_size = 15) + 
-      #   theme(legend.position.inside = c(0.95, 0.95),
-      #         legend.justification = c(1, 1),
-      #         axis.text.x = element_text(angle = 0, hjust = 0.5),  # Fully horizontal labels
-      #         panel.grid.major.x = element_blank())  # Remove default x-grid lines
-
-
       
 # Figure 4---------------------------------------------------------------------
       # write the necessary data to a data frame:
@@ -1033,12 +990,11 @@
       
       #then read in data
       hz_type <-  d %>% select(c(1,12))
-      #omit all types with less than 30 observation
-      # Count the number of OWCs for each event type
+      #omit all types with less than 30 occurrences
       event_counts <- hz_type %>%
         group_by(H.5.) %>%
-        summarise(OWC_count = n()) %>%
-        filter(OWC_count >= 30)
+        summarise(Occurances = n()) %>%
+        filter(Occurances >= 30)
       
       # Filter the original dataframe to include only those event types
       hz_type <- hz_type %>%
@@ -1049,19 +1005,11 @@
         mutate(presence = 1) %>%
         pivot_wider(names_from = H.5., values_from = presence, values_fill = list(presence = 0))
       
-      
-      
       # Remove the OWC column for correlation calculation
       correlation_data <- presence_matrix %>% select(-OWC)
       
-      #  put in order
-      desired_order <- c("Dr", "Ea", "ER", "Fi", "Fl", "GsEp", "Hu", "Li", "PD", "SEW", "SS", "Wi")  # Update this list as needed
-      
-      correlation_data <- correlation_data[, desired_order]
-      
       # correlation matrix and p-values
       correlation_results <- rcorr(as.matrix(correlation_data), type="spearman")
-      
       
       # Extract correlation coefficients and p-values
       correlation_matrix <- correlation_results$r
@@ -1074,10 +1022,8 @@
       names(table.s8) <- c("Hz type 1", "Hz type 2", "Rho", "p-value", "n")
       #remove duplicates
       table.s8 <- table.s8[!duplicated(t(apply(table.s8[, c("Hz type 1", "Hz type 2")], 1, sort))), ]
-      #table.s8 <- table.s8[!(table.s8[["Hz type 1"]] == "SEW" & table.s8[["Hz type 2"]] == "SS" | 
-      #                         table.s8[["Hz type 1"]] == "SS" & table.s8[["Hz type 2"]] == "SEW"), ]
       table.s8 <- table.s8[table.s8$`Hz type 1` != table.s8$`Hz type 2`, ]
-      #table.s8 <- table.s8[order(table.s8$`p-value`), ]
+      #table.s8 <- table.s8[order(table.s8$`p-value`), ] #(order the table by p-value if desired)
       writexl::write_xlsx(table.s8, "S8")
       
       

@@ -216,6 +216,8 @@
       mean_label <- paste("Mean -", round(mean_hazard, 1))
       median_label <- paste("Median -", median_hazard)
       
+   
+         
       # Define bin breaks and labels (we decided to bin by 15)-------------------------------------------------
       breaks <- seq(0, max(data421$Number_of_hazards, na.rm = TRUE), by = 15)
       labels <- paste0(breaks[-length(breaks)], "-", breaks[-1] - 1)
@@ -993,8 +995,8 @@
       #omit all types with less than 30 occurrences
       event_counts <- hz_type %>%
         group_by(H.5.) %>%
-        summarise(Occurances = n()) %>%
-        filter(Occurances >= 30)
+        filter(n_distinct(OWC) >= 15) %>%
+        ungroup()
       
       # Filter the original dataframe to include only those event types
       hz_type <- hz_type %>%
@@ -1017,7 +1019,7 @@
       obs_count <- correlation_results$n
       Rhos <- as.data.frame(as.table(correlation_matrix))
       Ps <- as.data.frame(as.table(p_value_matrix))
-      Ns <- as.data.frame(as.table(obs_count))
+      Ns <- as.data.frame(as.table(obs_count)) #in this version of the table, n = the total number of societies that experienced at least one of the five hazard types that occur in at least 15 societies
       table.s8 <- cbind(Rhos, Ps$Freq, Ns$Freq)
       names(table.s8) <- c("Hz type 1", "Hz type 2", "Rho", "p-value", "n")
       #remove duplicates

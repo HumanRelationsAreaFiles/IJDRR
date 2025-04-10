@@ -1097,7 +1097,68 @@
       
       
       
-#table S10. (Wilcoxon rank sums test for floods vs. droughts)-------------------
+#table S10. (Wilcoxon rank sums test for droughts vs. other slow onset hazards)-------------------
+      #this was formerly table S9b.
+      s9bdr <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Dr"))
+      s9bnodr_slow <- finaldata %>% filter(time %in% c(30,60) & H.7. %in% c(1) & !H.5. %in% c("Dr")) %>% mutate(H.5. = ifelse(!H.5. %in% c("Dr"), "OTHER", H.5.))
+      
+      
+      #part 1: calculate the mean ranks
+      ranks_Dr <- rank(c(s9bdr$H.8.))
+      sum_ranks_Dr <- sum(ranks_Dr)
+      mean_ranks_Dr <- mean(ranks_Dr)
+      
+      ranks_Slow <- rank(c(s9bnodr_slow$H.8.))
+      sum_ranks_Sl <- sum(ranks_Slow)
+      mean_ranks_Sl <- mean(ranks_Slow)
+      
+      table.s9b1 <- data.frame(Hz_type = c("Dr", "NoDr_Slow", "Total"), Num_events =
+                                 c(nrow(s9bdr),nrow(s9bnodr_slow),sum(nrow(s9bdr),nrow(s9bnodr_slow))), 
+                               Mean_rank = c(mean_ranks_Dr,mean_ranks_Sl,NA), sum_ranks = c(sum_ranks_Dr,sum_ranks_Sl,NA))
+      writexl::write_xlsx(table.s9b1, "S9b-1")
+
+      #part 2: calculate the actual U and W scores
+      combined_data1 <- c(s9bdr$H.8., s9bnodr_slow$H.8.)
+      group_indicator <- c(rep("Dr", length(s9bdr$H.8.)), rep("Sl", length(s9bnodr_slow$H.8.)))
+      #calculate ranks for the combined data
+      combined_data <- data.frame(H8 = combined_data1, type = group_indicator)
+      W_score <- wilcox.test(H8 ~ type, data = combined_data, exact = FALSE)
+      #the W values can now be printed and copy-pasted into the table:
+      print(W_score$statistic)
+      print(W_score$p.value)
+      
+      n1 <- sum(combined_data$type == "Dr") #for the U score
+      n2 <- sum(combined_data$type == "Sl")
+      U <- W_score$statistic - (n1 * (n1 + 1)) / 2
+      
+      mu_U <- (n1 * n2) / 2 #and then the Z score
+      sigma_U <- sqrt((n1 * n2 * (n1 + n2 + 1)) / 12)
+      Z <- (U - mu_U) / sigma_U
+      table.s9b2 <- data.frame(Stat = c("U","W","Z","p"), Value = c(U, W_score$statistic,
+                                                                    Z, W_score$p.value))
+      writexl::write_xlsx(table.s9b2, "S9b-2")
+      
+
+      
+      
+      
+      #part 3: finally, calculate general summary stats for H8
+      dr <- c(s9bdr$H.8.)
+      sl <- c(s9bnodr_slow$H.8.)
+      table.s9b3 <- data.frame(Hz_type = c("Droughts", "Slow"), Num_events = c(nrow(s9bdr),nrow(s9bnodr_slow)),
+                               Mean = c(mean(dr, na.rm = TRUE), mean(sl, na.rm = TRUE)), 
+                               Min = c(min(dr, na.rm = TRUE), min(sl, na.rm = TRUE)), 
+                               Median = c(median(dr, na.rm = TRUE), median(sl, na.rm = TRUE)), 
+                               Max = c(max(dr, na.rm = TRUE), max(sl, na.rm = TRUE)), 
+                               SD = c(sd(dr, na.rm = TRUE), sd(sl, na.rm = TRUE)))
+      writexl::write_xlsx(table.s9b3,"S9b-3")
+      
+      
+      
+      #the 3 components of table S9b are now saved to data frames called table.s9b1,
+      #table.s9b2 and table.s9b3
+      
+#table S10. OLD VERSION (Wilcoxon rank sums test for floods vs. droughts)-------------------
       #this was formerly table S9b.
       s9bfl <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Fl"))
       s9bdr <- finaldata %>% filter(time %in% c(30,60) & H.5. %in% c("Dr"))
